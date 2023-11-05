@@ -6,36 +6,40 @@ import {
   NavbarContent,
   NavbarItem,
 } from '@nextui-org/react';
-import { Link } from 'react-router-dom';
 import { AiOutlineSearch } from 'react-icons/ai';
+import NavItem from './NavItem';
+
+const navOptions = [
+  {
+    title: 'Trang chủ',
+    url: '/',
+  },
+  {
+    title: 'Dịch vụ',
+    url: '/event-services',
+  },
+  {
+    title: 'Giới thiệu',
+    url: '/gioi-thieu',
+  },
+  {
+    title: ' Liên hệ',
+    url: '/lien-he',
+  },
+];
 
 function Header() {
   return (
-    <Navbar isBordered maxWidth="full">
+    <Navbar isBordered maxWidth="full" className="fixed">
       <NavbarBrand>
         <p className="font-bold text-inherit">LOGO</p>
       </NavbarBrand>
       <NavbarContent className="hidden sm:flex gap-4" justify="center">
-        <NavbarItem isActive>
-          <Link to="." color="foreground">
-            Trang chủ
-          </Link>
-        </NavbarItem>
-        <NavbarItem>
-          <Link to="." color="foreground">
-            Dịch vụ
-          </Link>
-        </NavbarItem>
-        <NavbarItem>
-          <Link to="." color="foreground">
-            Giới thiệu
-          </Link>
-        </NavbarItem>
-        <NavbarItem>
-          <Link to="." color="foreground">
-            Liên hệ
-          </Link>
-        </NavbarItem>
+        {navOptions.map((navItem) => (
+          <NavItem to={navItem.url} key={navItem.url}>
+            {navItem.title}
+          </NavItem>
+        ))}
       </NavbarContent>
       <NavbarContent justify="end">
         <Input

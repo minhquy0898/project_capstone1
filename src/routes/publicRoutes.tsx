@@ -10,6 +10,9 @@ const Register = lazy(
   () => import('../features/Authentication/pages/Register'),
 );
 const UserProfile = lazy(() => import('../features/User/pages/UserProfile'));
+const EventServices = lazy(
+  () => import('../features/Booking/pages/EventServices'),
+);
 
 const publicRoutes: IRoute[] = [
   {
@@ -34,6 +37,10 @@ const publicRoutes: IRoute[] = [
     page: <UserProfile />,
     path: 'profile',
     layout: SidebarLayout,
+  },
+  {
+    page: <EventServices />,
+    path: 'event-services',
   },
 ];
 

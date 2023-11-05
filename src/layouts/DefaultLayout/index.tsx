@@ -1,6 +1,6 @@
 import { ReactNode } from 'react';
-import Footer from '../components/Footer';
-import Header from '../components/Header';
+import Footer from '../components/Footer/Footer';
+import Header from '../components/Header/Header';
 
 interface DefaultLayoutProps {
   children: ReactNode;
@@ -8,11 +8,17 @@ interface DefaultLayoutProps {
 
 function DefaultLayout({ children }: DefaultLayoutProps) {
   return (
-    <div className="flex flex-col h-screen justify-between">
+    <>
       <Header />
-      {children}
-      <Footer />
-    </div>
+      <div className="flex flex-col h-screen justify-between items-center mt-[64px]">
+        <div className="d-flex flex-col mx-auto w-full">
+          <main className="min-h-screen container w-full flex mx-auto">
+            <div className="container">{children}</div>
+          </main>
+          <Footer />
+        </div>
+      </div>
+    </>
   );
 }
 

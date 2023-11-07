@@ -1,20 +1,19 @@
 import {
-  Avatar,
   Button,
   Dropdown,
   DropdownItem,
   DropdownMenu,
   DropdownTrigger,
-  Input,
   Navbar,
   NavbarBrand,
   NavbarContent,
   NavbarItem,
 } from '@nextui-org/react';
-import { AiOutlineSearch } from 'react-icons/ai';
+// import { AiOutlineSearch } from 'react-icons/ai';
 import { BsChevronDown } from 'react-icons/bs';
 
 import NavItem from './NavItem';
+import { Link } from 'react-router-dom';
 
 const navOptions = [
   {
@@ -102,7 +101,10 @@ function Header() {
         ))}
       </NavbarContent>
       <NavbarContent justify="end">
-        <Input
+        <Button color="primary" to="/login" as={Link}>
+          Đăng nhập
+        </Button>
+        {/* <Input
           classNames={{
             base: 'max-w-full sm:max-w-[10rem] h-10',
             mainWrapper: 'h-full',
@@ -114,10 +116,10 @@ function Header() {
           size="sm"
           startContent={<AiOutlineSearch size={18} />}
           type="search"
-        />
-        <NavbarItem>
+        /> */}
+        {/* <NavbarItem>
           <Avatar src="https://i.pravatar.cc/150?u=a04258114e29026702d" />
-        </NavbarItem>
+        </NavbarItem> */}
       </NavbarContent>
     </Navbar>
   );

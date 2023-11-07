@@ -1,10 +1,46 @@
 import { Button, Card, CardBody, Checkbox } from '@nextui-org/react';
-import { FormProvider, useForm } from 'react-hook-form';
-import CInput from '../../../components/CInput';
+import { FormProvider } from 'react-hook-form';
 import { Link } from 'react-router-dom';
+import * as Yup from 'yup';
+
+import CInput from '../../../components/CInput';
+import useFormWithYup from '../../../hooks/useFormWithYup';
+import { useRegister } from '../../../apis/auth.api';
+
+const registerSchema = Yup.object().shape({
+  firstname: Yup.string().required('Vui lòng nhập trường này!'),
+  lastname: Yup.string().required('Vui lòng nhập trường này!'),
+  email: Yup.string()
+    .required('Vui lòng nhập email!')
+    .email('Email không hợp lệ!'),
+  password: Yup.string()
+    .required('Vui lòng nhập mật khẩu!')
+    .min(6, 'Mật khẩu phải có ít nhất 6 ký tự!'),
+  passwordConfirm: Yup.string()
+    .required('Vui lòng nhập mật khẩu!')
+    .oneOf([Yup.ref('password')], 'Mật khẩu không khớp!'),
+});
 
 function Register() {
-  const methods = useForm();
+  const registerMutate = useRegister();
+
+  const methods = useFormWithYup(registerSchema, {
+    defaultValues: {
+      firstname: '',
+      lastname: '',
+      email: '',
+      password: '',
+      passwordConfirm: '',
+    },
+    mode: 'onChange',
+  });
+
+  const { handleSubmit } = methods;
+
+  const submitHandler = handleSubmit((values) => {
+    console.log('values', values);
+    registerMutate.mutate(values);
+  });
 
   return (
     <Card className="min-h-[500px]">
@@ -13,7 +49,7 @@ function Register() {
           Đăng ký tài khoản
         </h1>
         <FormProvider {...methods}>
-          <form className="min-w-[360px]">
+          <form onSubmit={submitHandler} className="min-w-[360px]">
             <CInput name="firstname" placeholder="Nguyễn" label="Họ" />
             <CInput name="lastname" placeholder="Văn A" label="Tên" />
             <CInput name="email" placeholder="abc@gmail.com" label="Email" />
@@ -24,8 +60,15 @@ function Register() {
               placeholder="Mật khẩu của bạn"
               label="Mật khẩu"
             />
+            <CInput
+              autoComplete="on"
+              name="passwordConfirm"
+              type="password"
+              placeholder="Nhập lại mật khẩu"
+              label="Mật khẩu bạn vừa nhập"
+            />
             <Checkbox>Ghi nhớ mật khẩu</Checkbox>
-            <Button fullWidth color="primary" className="mt-10">
+            <Button type="submit" fullWidth color="primary" className="mt-10">
               Đăng ký
             </Button>
             <p className="mt-1 text-center">

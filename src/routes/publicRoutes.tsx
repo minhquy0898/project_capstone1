@@ -13,6 +13,7 @@ const UserProfile = lazy(() => import('../features/User/pages/UserProfile'));
 const EventServices = lazy(
   () => import('../features/Booking/pages/EventServices'),
 );
+const Admin = lazy(() => import('../features/Admin/pages/Admin'));
 
 const publicRoutes: IRoute[] = [
   {
@@ -40,7 +41,12 @@ const publicRoutes: IRoute[] = [
   },
   {
     page: <EventServices />,
-    path: 'event-services',
+    path: 'dich-vu',
+  },
+  {
+    page: <Admin />,
+    path: 'admin',
+    layout: SidebarLayout,
   },
 ];
 

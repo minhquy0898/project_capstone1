@@ -1,5 +1,10 @@
 import {
   Avatar,
+  Button,
+  Dropdown,
+  DropdownItem,
+  DropdownMenu,
+  DropdownTrigger,
   Input,
   Navbar,
   NavbarBrand,
@@ -7,6 +12,8 @@ import {
   NavbarItem,
 } from '@nextui-org/react';
 import { AiOutlineSearch } from 'react-icons/ai';
+import { BsChevronDown } from 'react-icons/bs';
+
 import NavItem from './NavItem';
 
 const navOptions = [
@@ -16,7 +23,7 @@ const navOptions = [
   },
   {
     title: 'Dịch vụ',
-    url: '/event-services',
+    url: '/dich-vu',
   },
   {
     title: 'Giới thiệu',
@@ -35,6 +42,59 @@ function Header() {
         <p className="font-bold text-inherit">LOGO</p>
       </NavbarBrand>
       <NavbarContent className="hidden sm:flex gap-4" justify="center">
+        <Dropdown className="backdrop-blur-lg backdrop-saturate-150 bg-background/70">
+          <NavbarItem>
+            <DropdownTrigger>
+              <Button
+                disableRipple
+                className="p-0 bg-transparent data-[hover=true]:bg-transparent"
+                endContent={<BsChevronDown />}
+                radius="sm"
+                variant="light"
+              >
+                Features
+              </Button>
+            </DropdownTrigger>
+          </NavbarItem>
+          <DropdownMenu
+            aria-label="ACME features"
+            className="w-[340px]"
+            itemClasses={{
+              base: 'gap-4',
+            }}
+          >
+            <DropdownItem
+              key="autoscaling"
+              // startContent={icons.scale}
+            >
+              Tổ Chức Sự Kiện
+            </DropdownItem>
+            <DropdownItem
+              key="usage_metrics"
+              // startContent={icons.activity}
+            >
+              Tổ Chức Khai Trương Trọn Gói
+            </DropdownItem>
+            <DropdownItem
+              key="production_ready"
+              // startContent={icons.flash}
+            >
+              Tổ Chức Lễ Khởi Công, Động Thổ
+            </DropdownItem>
+            <DropdownItem
+              key="99_uptime"
+              // startContent={icons.server}
+            >
+              Tổ Chức Gala Dinner
+            </DropdownItem>
+            <DropdownItem>Tổ Chức Tiệc - Gala Dinner</DropdownItem>
+            <DropdownItem>Lễ Hội Văn Hóa</DropdownItem>
+            <DropdownItem>Hội Nghị - Hội Thảo</DropdownItem>
+            <DropdownItem>Cho Thuê Thiết Bị Ánh Sáng</DropdownItem>
+            <DropdownItem>Dịch Vụ Cung Cấp MC</DropdownItem>
+            <DropdownItem>Dịch Vụ Cung Cấp Nhóm Nhảy</DropdownItem>
+          </DropdownMenu>
+        </Dropdown>
         {navOptions.map((navItem) => (
           <NavItem to={navItem.url} key={navItem.url}>
             {navItem.title}

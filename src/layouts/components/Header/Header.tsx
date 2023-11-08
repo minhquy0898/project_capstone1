@@ -1,4 +1,5 @@
 import {
+  Avatar,
   Button,
   Dropdown,
   DropdownItem,
@@ -9,11 +10,11 @@ import {
   NavbarContent,
   NavbarItem,
 } from '@nextui-org/react';
-// import { AiOutlineSearch } from 'react-icons/ai';
 import { BsChevronDown } from 'react-icons/bs';
 
 import NavItem from './NavItem';
 import { Link } from 'react-router-dom';
+import { useFetchUser } from '../../../apis/auth.api';
 
 const navOptions = [
   {
@@ -35,6 +36,8 @@ const navOptions = [
 ];
 
 function Header() {
+  const { data: userData } = useFetchUser();
+
   return (
     <Navbar isBordered maxWidth="full" className="fixed">
       <NavbarBrand>
@@ -101,25 +104,15 @@ function Header() {
         ))}
       </NavbarContent>
       <NavbarContent justify="end">
-        <Button color="primary" to="/login" as={Link}>
-          Đăng nhập
-        </Button>
-        {/* <Input
-          classNames={{
-            base: 'max-w-full sm:max-w-[10rem] h-10',
-            mainWrapper: 'h-full',
-            input: 'text-small',
-            inputWrapper:
-              'h-full font-normal text-default-500 bg-default-400/20 dark:bg-default-500/20',
-          }}
-          placeholder="Type to search..."
-          size="sm"
-          startContent={<AiOutlineSearch size={18} />}
-          type="search"
-        /> */}
-        {/* <NavbarItem>
-          <Avatar src="https://i.pravatar.cc/150?u=a04258114e29026702d" />
-        </NavbarItem> */}
+        {userData?.isSuccess ? (
+          <NavbarItem>
+            <Avatar src="https://i.pravatar.cc/150?u=a04258114e29026702d" />
+          </NavbarItem>
+        ) : (
+          <Button color="primary" to="/login" as={Link}>
+            Đăng nhập
+          </Button>
+        )}
       </NavbarContent>
     </Navbar>
   );

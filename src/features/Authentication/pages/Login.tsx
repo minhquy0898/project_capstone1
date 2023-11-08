@@ -1,7 +1,8 @@
 import { Button, Card, CardBody, Checkbox } from '@nextui-org/react';
 import { FormProvider } from 'react-hook-form';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import * as Yup from 'yup';
+import { toast } from 'react-toastify';
 
 import CInput from '../../../components/CInput';
 import useFormWithYup from '../../../hooks/useFormWithYup';
@@ -19,6 +20,7 @@ const loginSchema = Yup.object().shape({
 
 function Login() {
   const loginMutate = useLogin();
+  const navigate = useNavigate();
 
   const methods = useFormWithYup(loginSchema, {
     defaultValues: {
@@ -31,11 +33,17 @@ function Login() {
   const { handleSubmit } = methods;
 
   const submitHandler = handleSubmit((values) => {
-    console.log('values', values);
-    loginMutate.mutate(values);
+    loginMutate.mutate(values, {
+      onSuccess(data) {
+        if (data.isSuccess) {
+          toast.success('Đăng nhập thành công!');
+          navigate('/', { replace: true });
+        } else {
+          toast.error('Đăng nhập thất bại!');
+        }
+      },
+    });
   });
-
-  console.log('loginMutate', loginMutate.data);
 
   return (
     <Card className="min-h-[500px]">
@@ -43,8 +51,6 @@ function Login() {
         <h1 className="mt-4 mb-10 text-center font-bold text-3xl">Đăng nhập</h1>
         <FormProvider {...methods}>
           <form onSubmit={submitHandler} className="min-w-[360px]">
-            {/* <CInput name="firstname" placeholder="Nguyễn" label="Họ" />
-            <CInput name="lastname" placeholder="Văn A" label="Tên" /> */}
             <CInput name="email" placeholder="abc@gmail.com" label="Email" />
             <CInput
               autoComplete="on"
@@ -53,11 +59,17 @@ function Login() {
               placeholder="Mật khẩu của bạn"
               label="Mật khẩu"
             />
-            {!loginMutate.data?.isSuccess && (
+            {loginMutate.isSuccess && !loginMutate.data.isSuccess && (
               <ErrorMessage>{loginMutate.data?.msg}</ErrorMessage>
             )}
             <Checkbox>Ghi nhớ mật khẩu</Checkbox>
-            <Button type="submit" fullWidth color="primary" className="mt-10">
+            <Button
+              disabled={loginMutate.isLoading}
+              type="submit"
+              fullWidth
+              color="primary"
+              className="mt-10"
+            >
               Đăng nhập
             </Button>
             <p className="mt-1 text-center">

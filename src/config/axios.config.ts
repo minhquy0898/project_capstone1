@@ -32,23 +32,20 @@ http.interceptors.request.use(
 
 http.interceptors.response.use(
   (response: AxiosResponse) => {
-    const newResponse = response;
-
-    if (newResponse && newResponse.data) {
-      let responseData = newResponse.data;
-
-      if (responseData?.data?.accessToken) {
-        localStorage.setItem('auth_token', responseData?.data?.accessToken);
-      }
-
-      if (responseData?.data.status === 401) {
-        localStorage.setItem('auth_token', '');
-      }
-
-      return responseData;
+    if (response.data?.data?.accessToken) {
+      localStorage.setItem('auth_token', response.data?.data?.accessToken);
     }
 
-    return newResponse.data;
+    if (response?.data.status === 401) {
+      localStorage.setItem('auth_token', '');
+    }
+
+    return response;
+    // if (response && response.data) {
+
+    // }
+
+    // return newResponse.data;
   },
   (error) => {
     // eslint-disable-next-line no-console

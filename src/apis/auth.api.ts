@@ -1,4 +1,4 @@
-import { useMutation } from '@tanstack/react-query';
+import { useMutation, useQuery } from '@tanstack/react-query';
 import http from '../config/axios.config';
 import { IGenericResponse } from '../types/common';
 import { IUser } from '../types/user';
@@ -27,16 +27,31 @@ export const useLogin = () =>
 interface IRegisterBody {
   email: string;
   password: string;
-  firstname: string;
-  lastname: string;
+  firstName: string;
+  lastName: string;
 }
 
 const registerApi = async (body: IRegisterBody) => {
-  const res = await http.post<IGenericResponse>('login', body);
+  const res = await http.post<IGenericResponse>('auth/sign-up', body);
+
   return res.data;
 };
 
 export const useRegister = () =>
   useMutation({
     mutationFn: registerApi,
+  });
+
+/**
+ * fetch user
+ */
+const fetchUserApi = async () => {
+  const res = await http.get<IGenericResponse<IUser>>('fetchUser');
+  return res.data;
+};
+
+export const useFetchUser = () =>
+  useQuery({
+    queryKey: ['fetch-user'],
+    queryFn: fetchUserApi,
   });

@@ -14,6 +14,8 @@
     "@hookform/resolvers": "^3.3.2",
     "@nextui-org/react": "^2.2.1",
     "@tanstack/react-query": "4.36.1",
+    "@tanstack/react-query-devtools": "^5.8.1",
+    "@types/react-icons": "^3.0.0",
     "axios": "1.6.0",
     "framer-motion": "^10.16.4",
     "react": "^18.2.0",

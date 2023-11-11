@@ -13,25 +13,8 @@ import publicRoutes from './publicRoutes';
 import { Spinner } from '@nextui-org/react';
 import PageNotFound from '../pages/PageNotFound';
 import { useFetchUser } from '../apis/auth.api';
-import { Role } from '../types/user';
 import protectedRoutes from './protectedRoutes';
-
-interface RolesAuthRouterProps {
-  routeRole?: Role[];
-  userRole?: Role;
-}
-
-const RolesAuthRouter: FC<RolesAuthRouterProps> = ({ routeRole, userRole }) => {
-  if (!userRole) {
-    return <Navigate to="/" replace />;
-  }
-
-  if (!routeRole || routeRole.includes(userRole)) {
-    return <Outlet />;
-  }
-
-  return <Navigate to="/" replace />;
-};
+import { Role } from '../types/user';
 
 interface LogoutRequiredProps {
   isAuth?: boolean;
@@ -51,7 +34,7 @@ const LogoutRequired: FC<LogoutRequiredProps> = ({
   return <Fragment>{children}</Fragment>;
 };
 
-const renderRoutes = (routes: IRoute[], isAuth?: boolean) => {
+const renderRoutes = (routes: IRoute[], isAuth?: boolean, userRole?: Role) => {
   return routes.map((route) => {
     let Layout;
     if (route.layout === undefined) {
@@ -79,7 +62,15 @@ const renderRoutes = (routes: IRoute[], isAuth?: boolean) => {
                 isAuth={isAuth}
                 isRequired={route.isLogoutRequired}
               >
-                <PageWrapper title={route.title}>{route.page}</PageWrapper>
+                {!route.role?.length ||
+                userRole === 'admin' ||
+                (route.role?.length &&
+                  !!route.role?.find((item) => item === userRole)) ||
+                !isAuth ? (
+                  <PageWrapper title={route.title}>{route.page}</PageWrapper>
+                ) : (
+                  <Navigate to="/" />
+                )}
               </LogoutRequired>
             </Suspense>
           </Layout>
@@ -93,6 +84,16 @@ export const PublicRouter = () => {
   return <Outlet />;
 };
 
+interface IPrivateRouterProps {
+  isAuth: boolean;
+}
+
+export const PrivateRouter: FC<IPrivateRouterProps> = ({ isAuth }) => {
+  if (!isAuth) return <Navigate to="/" />;
+
+  return <Outlet />;
+};
+
 export default function AppRouter() {
   const { data: userData } = useFetchUser();
 
@@ -102,9 +103,16 @@ export default function AppRouter() {
         <Route element={<PublicRouter />}>
           {renderRoutes(publicRoutes, userData?.isSuccess)}
         </Route>
-        <Route element={<RolesAuthRouter routeRole={userData?.data.role} />}>
-          {renderRoutes(protectedRoutes)}
-        </Route>
+
+        {!!userData?.isSuccess && (
+          <Route element={<PrivateRouter isAuth={!!userData?.isSuccess} />}>
+            {renderRoutes(
+              protectedRoutes,
+              userData?.isSuccess,
+              userData?.data.account.role,
+            )}
+          </Route>
+        )}
 
         <Route path="*" element={<PageNotFound />} />
       </Routes>

@@ -11,10 +11,10 @@ import {
   NavbarItem,
 } from '@nextui-org/react';
 import { BsChevronDown } from 'react-icons/bs';
+import { Link } from 'react-router-dom';
 
 import NavItem from './NavItem';
-import { Link } from 'react-router-dom';
-import { useFetchUser } from '../../../apis/auth.api';
+import { useFetchUser, useLogout } from '../../../apis/auth.api';
 
 const navOptions = [
   {
@@ -37,6 +37,7 @@ const navOptions = [
 
 function Header() {
   const { data: userData } = useFetchUser();
+  const logoutMutate = useLogout();
 
   return (
     <Navbar isBordered maxWidth="full" className="fixed">
@@ -65,30 +66,14 @@ function Header() {
               base: 'gap-4',
             }}
           >
-            <DropdownItem
-              key="autoscaling"
-              // startContent={icons.scale}
-            >
-              Tổ Chức Sự Kiện
-            </DropdownItem>
-            <DropdownItem
-              key="usage_metrics"
-              // startContent={icons.activity}
-            >
+            <DropdownItem key="autoscaling">Tổ Chức Sự Kiện</DropdownItem>
+            <DropdownItem key="usage_metrics">
               Tổ Chức Khai Trương Trọn Gói
             </DropdownItem>
-            <DropdownItem
-              key="production_ready"
-              // startContent={icons.flash}
-            >
+            <DropdownItem key="production_ready">
               Tổ Chức Lễ Khởi Công, Động Thổ
             </DropdownItem>
-            <DropdownItem
-              key="99_uptime"
-              // startContent={icons.server}
-            >
-              Tổ Chức Gala Dinner
-            </DropdownItem>
+            <DropdownItem key="99_uptime">Tổ Chức Gala Dinner</DropdownItem>
             <DropdownItem>Tổ Chức Tiệc - Gala Dinner</DropdownItem>
             <DropdownItem>Lễ Hội Văn Hóa</DropdownItem>
             <DropdownItem>Hội Nghị - Hội Thảo</DropdownItem>
@@ -105,9 +90,33 @@ function Header() {
       </NavbarContent>
       <NavbarContent justify="end">
         {userData?.isSuccess ? (
-          <NavbarItem>
-            <Avatar src="https://i.pravatar.cc/150?u=a04258114e29026702d" />
-          </NavbarItem>
+          <>
+            <Dropdown placement="bottom-end">
+              <DropdownTrigger>
+                <Avatar
+                  isBordered
+                  as="button"
+                  className="transition-transform"
+                  src="https://i.pravatar.cc/150?u=a042581f4e29026704d"
+                />
+              </DropdownTrigger>
+              <DropdownMenu aria-label="Profile Actions" variant="flat">
+                <DropdownItem key="profile" className="h-14 gap-2">
+                  <p className="font-semibold">{userData.data.account.email}</p>
+                </DropdownItem>
+                <DropdownItem key="settings">
+                  <Link to="/profile">Thông tin cá nhân</Link>
+                </DropdownItem>
+                <DropdownItem
+                  onPress={() => logoutMutate.mutate()}
+                  key="logout"
+                  color="danger"
+                >
+                  Đăng xuất
+                </DropdownItem>
+              </DropdownMenu>
+            </Dropdown>
+          </>
         ) : (
           <Button color="primary" to="/login" as={Link}>
             Đăng nhập

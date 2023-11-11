@@ -1,25 +1,26 @@
-// interface SidebarProps {
-
 import { Listbox, ListboxItem } from '@nextui-org/react';
-import { Link } from 'react-router-dom';
+import { NavLink } from 'react-router-dom';
+import { ISidebarOption } from '../../../types/common';
 
-// }
+interface SidebarProps {
+  options: ISidebarOption[];
+}
 
-function Sidebar() {
+function Sidebar({ options }: SidebarProps) {
   return (
     <Listbox>
-      <ListboxItem key={1}>
-        <Link to=".">Sidebar Item 1</Link>
-      </ListboxItem>
-      <ListboxItem key={2}>
-        <Link to=".">Sidebar Item 2</Link>
-      </ListboxItem>
-      <ListboxItem key={3}>
-        <Link to=".">Sidebar Item 3</Link>
-      </ListboxItem>
-      <ListboxItem key={4}>
-        <Link to=".">Sidebar Item 4</Link>
-      </ListboxItem>
+      {options.map((option) => (
+        <ListboxItem key={option.path}>
+          <NavLink
+            style={({ isActive }) => ({
+              fontWeight: isActive ? '600' : '',
+            })}
+            to={option.path}
+          >
+            {option.name}
+          </NavLink>
+        </ListboxItem>
+      ))}
     </Listbox>
   );
 }

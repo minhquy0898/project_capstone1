@@ -1,4 +1,4 @@
-import { useMutation, useQuery } from '@tanstack/react-query';
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import http from '../config/axios.config';
 import { IGenericResponse } from '../types/common';
 import { IUser } from '../types/user';
@@ -16,10 +16,18 @@ const loginApi = async (body: ILoginBody) => {
   return res.data;
 };
 
-export const useLogin = () =>
-  useMutation({
+export const useLogin = () => {
+  const queryClient = useQueryClient();
+
+  return useMutation({
     mutationFn: loginApi,
+    onSuccess(data) {
+      if (data.isSuccess) {
+        queryClient.invalidateQueries(['fetch-user']);
+      }
+    },
   });
+};
 
 /**
  * register
@@ -46,7 +54,7 @@ export const useRegister = () =>
  * fetch user
  */
 const fetchUserApi = async () => {
-  const res = await http.get<IGenericResponse<IUser>>('fetchUser');
+  const res = await http.get<IGenericResponse<{ account: IUser }>>('fetchUser');
   return res.data;
 };
 
@@ -55,3 +63,21 @@ export const useFetchUser = () =>
     queryKey: ['fetch-user'],
     queryFn: fetchUserApi,
   });
+
+const logoutApi = async () => {
+  const res = await http.post('auth/logout');
+  return res.data;
+};
+
+export const useLogout = () => {
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: logoutApi,
+    onSettled() {
+      localStorage.removeItem('auth_token');
+      queryClient.removeQueries();
+      window.location.replace('/login');
+    },
+  });
+};

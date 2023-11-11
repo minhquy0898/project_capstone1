@@ -1,5 +1,6 @@
 import { NextUIProvider } from '@nextui-org/react';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
+import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
 import { ReactNode } from 'react';
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
@@ -11,8 +12,9 @@ interface AppProviderProps {
 const queryClient = new QueryClient({
   defaultOptions: {
     queries: {
-      refetchOnWindowFocus: true,
+      refetchOnWindowFocus: false,
       retry: 3,
+      staleTime: 3 * 1000 * 60,
     },
   },
 });
@@ -20,7 +22,10 @@ const queryClient = new QueryClient({
 function AppProvider({ children }: AppProviderProps) {
   return (
     <NextUIProvider>
-      <QueryClientProvider client={queryClient}>{children}</QueryClientProvider>
+      <QueryClientProvider client={queryClient}>
+        {children}
+        <ReactQueryDevtools initialIsOpen={false} />
+      </QueryClientProvider>
       <ToastContainer
         position="bottom-left"
         autoClose={5000}

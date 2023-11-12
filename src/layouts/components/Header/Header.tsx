@@ -8,9 +8,8 @@ import {
   Navbar,
   NavbarBrand,
   NavbarContent,
-  NavbarItem,
 } from '@nextui-org/react';
-import { BsChevronDown } from 'react-icons/bs';
+import { MdOutlineCalendarToday } from 'react-icons/md';
 import { Link } from 'react-router-dom';
 
 import NavItem from './NavItem';
@@ -36,7 +35,7 @@ const navOptions = [
 ];
 
 function Header() {
-  const { data: userData } = useFetchUser();
+  const { data: userData, isLoading: isLoadingUser } = useFetchUser();
   const logoutMutate = useLogout();
 
   return (
@@ -45,7 +44,7 @@ function Header() {
         <p className="font-bold text-inherit">LOGO</p>
       </NavbarBrand>
       <NavbarContent className="hidden sm:flex gap-4" justify="center">
-        <Dropdown className="backdrop-blur-lg backdrop-saturate-150 bg-background/70">
+        {/* <Dropdown className="backdrop-blur-lg backdrop-saturate-150 bg-background/70">
           <NavbarItem>
             <DropdownTrigger>
               <Button
@@ -81,46 +80,62 @@ function Header() {
             <DropdownItem>Dịch Vụ Cung Cấp MC</DropdownItem>
             <DropdownItem>Dịch Vụ Cung Cấp Nhóm Nhảy</DropdownItem>
           </DropdownMenu>
-        </Dropdown>
+        </Dropdown> */}
         {navOptions.map((navItem) => (
           <NavItem to={navItem.url} key={navItem.url}>
             {navItem.title}
           </NavItem>
         ))}
       </NavbarContent>
+
       <NavbarContent justify="end">
-        {userData?.isSuccess ? (
+        <Button
+          to={userData?.isSuccess ? '/booking' : '/login'}
+          as={Link}
+          startContent={<MdOutlineCalendarToday />}
+          color="primary"
+        >
+          Đặt lịch
+        </Button>
+
+        {!isLoadingUser && (
           <>
-            <Dropdown placement="bottom-end">
-              <DropdownTrigger>
-                <Avatar
-                  isBordered
-                  as="button"
-                  className="transition-transform"
-                  src="https://i.pravatar.cc/150?u=a042581f4e29026704d"
-                />
-              </DropdownTrigger>
-              <DropdownMenu aria-label="Profile Actions" variant="flat">
-                <DropdownItem key="profile" className="h-14 gap-2">
-                  <p className="font-semibold">{userData.data.account.email}</p>
-                </DropdownItem>
-                <DropdownItem key="settings">
-                  <Link to="/profile">Thông tin cá nhân</Link>
-                </DropdownItem>
-                <DropdownItem
-                  onPress={() => logoutMutate.mutate()}
-                  key="logout"
-                  color="danger"
-                >
-                  Đăng xuất
-                </DropdownItem>
-              </DropdownMenu>
-            </Dropdown>
+            {userData?.isSuccess ? (
+              <>
+                <Dropdown placement="bottom-end">
+                  <DropdownTrigger>
+                    <Avatar
+                      isBordered
+                      as="button"
+                      className="transition-transform"
+                      src="https://i.pravatar.cc/150?u=a042581f4e29026704d"
+                    />
+                  </DropdownTrigger>
+                  <DropdownMenu aria-label="Profile Actions" variant="flat">
+                    <DropdownItem key="profile" className="h-14 gap-2">
+                      <p className="font-semibold">
+                        {userData.data.account.email}
+                      </p>
+                    </DropdownItem>
+                    <DropdownItem key="settings">
+                      <Link to="/profile">Thông tin cá nhân</Link>
+                    </DropdownItem>
+                    <DropdownItem
+                      onPress={() => logoutMutate.mutate()}
+                      key="logout"
+                      color="danger"
+                    >
+                      Đăng xuất
+                    </DropdownItem>
+                  </DropdownMenu>
+                </Dropdown>
+              </>
+            ) : (
+              <Button color="primary" to="/login" as={Link}>
+                Đăng nhập
+              </Button>
+            )}
           </>
-        ) : (
-          <Button color="primary" to="/login" as={Link}>
-            Đăng nhập
-          </Button>
         )}
       </NavbarContent>
     </Navbar>

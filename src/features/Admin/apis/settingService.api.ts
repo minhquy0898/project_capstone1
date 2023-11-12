@@ -1,6 +1,7 @@
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import http from '../../../config/axios.config';
 import { IGenericResponse, IServiceItem } from '../../../types/common';
+import { IService } from '../../../types/service';
 
 /**
  * Thêm
@@ -102,6 +103,64 @@ export const useDeleteServiceById = () => {
     onSuccess(data) {
       if (data.isSuccess) {
         queryClient.invalidateQueries(['get-all-services']);
+      }
+    },
+  });
+};
+
+/**
+ * Thêm category dịch vụ
+ */
+const addCategoryService = async (body: { title: string }) => {
+  const res = await http.post<IGenericResponse<{ service: IService }>>(
+    'service',
+    body,
+  );
+  return res.data;
+};
+
+export const useAddCategoryService = () => {
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: addCategoryService,
+    onSuccess(data) {
+      if (data.isSuccess) {
+        queryClient.invalidateQueries(['get-all-categories-service']);
+      }
+    },
+  });
+};
+
+/**
+ * lấy tất cả categories dịch vụ
+ */
+const getAllCategoriesService = async () => {
+  const res =
+    await http.get<IGenericResponse<{ services: IService[] }>>('service');
+  return res.data;
+};
+
+export const useAllCategoriesService = () => {
+  return useQuery({
+    queryKey: ['get-all-categories-service'],
+    queryFn: getAllCategoriesService,
+  });
+};
+
+const deleteCategory = async (id: string) => {
+  const res = await http.delete<IGenericResponse>(`service/${id}`);
+  return res.data;
+};
+
+export const useDeleteCategory = () => {
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: deleteCategory,
+    onSuccess(data) {
+      if (data.isSuccess) {
+        queryClient.invalidateQueries(['get-all-categories-service']);
       }
     },
   });

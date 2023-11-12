@@ -14,13 +14,13 @@ import {
   useDisclosure,
 } from '@nextui-org/react';
 import { MdOutlineEdit, MdOutlineDeleteOutline } from 'react-icons/md';
+import { useState } from 'react';
+import { toast } from 'react-toastify';
 
 import {
   useAllService,
   useDeleteServiceById,
 } from '../../apis/settingService.api';
-import { useState } from 'react';
-import { toast } from 'react-toastify';
 
 interface TableSettingServiceProps {
   onEdit: (id: string) => void;

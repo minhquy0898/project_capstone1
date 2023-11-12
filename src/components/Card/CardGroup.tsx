@@ -18,7 +18,7 @@ function CardGroup({ title, data }: CardGroupProps) {
             <CardItem
               key={index}
               title={cardItem.title}
-              imageUrl={cardItem.imageUrl}
+              banner={cardItem.banner}
             />
           ))}
       </div>

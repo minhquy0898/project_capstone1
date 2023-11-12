@@ -13,7 +13,7 @@ function DefaultLayout({ children }: DefaultLayoutProps) {
       <div className="flex flex-col h-screen justify-between items-center mt-[64px]">
         <div className="d-flex flex-col mx-auto w-full">
           <main className="min-h-screen container w-full flex mx-auto">
-            <div className="container">{children}</div>
+            <div className="container my-10">{children}</div>
           </main>
           <Footer />
         </div>

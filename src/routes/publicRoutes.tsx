@@ -11,6 +11,9 @@ const Register = lazy(
 const EventServices = lazy(
   () => import('../features/Booking/pages/EventServices'),
 );
+const EventServiceDetail = lazy(
+  () => import('../features/Booking/pages/EventServiceDetail'),
+);
 
 const publicRoutes: IRoute[] = [
   {
@@ -36,6 +39,10 @@ const publicRoutes: IRoute[] = [
   {
     page: <EventServices />,
     path: 'dich-vu',
+  },
+  {
+    page: <EventServiceDetail />,
+    path: 'dich-vu/:id',
   },
 ];
 

@@ -3,7 +3,11 @@ import { IRoute } from '../types/route';
 import SidebarLayout from '../layouts/SidebarLayout';
 
 const UserProfile = lazy(() => import('../features/User/pages/UserProfile'));
+const Booking = lazy(() => import('../features/Booking/pages/Booking'));
 const Admin = lazy(() => import('../features/Admin/pages/Admin'));
+const SettingEvent = lazy(() => import('../features/Admin/pages/SettingEvent'));
+const Post = lazy(() => import('../features/Admin/pages/Post'));
+const Service = lazy(() => import('../features/Admin/pages/Service'));
 const SettingServiceOptions = lazy(
   () => import('../features/Admin/pages/SettingServiceOptions'),
 );
@@ -26,6 +30,29 @@ const protectedRoutes: IRoute[] = [
     path: 'setting-service-option',
     layout: SidebarLayout,
     role: ['admin', 'user'],
+  },
+  {
+    page: <Post />,
+    path: 'post',
+    layout: SidebarLayout,
+    role: ['admin'],
+  },
+  {
+    page: <Service />,
+    path: 'setting-service',
+    layout: SidebarLayout,
+    role: ['admin'],
+  },
+  {
+    page: <SettingEvent />,
+    path: 'setting-event',
+    layout: SidebarLayout,
+    role: ['admin'],
+  },
+  {
+    page: <Booking />,
+    path: 'booking',
+    role: ['user'],
   },
 ];
 

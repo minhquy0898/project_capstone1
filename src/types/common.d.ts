@@ -8,13 +8,13 @@ export interface IGenericResponse<T = any> {
 
 export interface ICardItem {
   title: string;
-  imageUrl: string;
+  banner: string;
 }
 
 export interface ISidebarOption {
   name: string;
   path: string;
-  role?: Role;
+  role?: Role[];
 }
 
 export interface IServiceItem {
@@ -24,4 +24,9 @@ export interface IServiceItem {
   price: string;
   quantity: string;
   note: string;
+}
+
+export interface ISelectOption {
+  label: string;
+  value: string | number;
 }

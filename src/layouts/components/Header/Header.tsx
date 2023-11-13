@@ -131,7 +131,7 @@ function Header() {
                 </Dropdown>
               </>
             ) : (
-              <Button color="primary" to="/login" as={Link}>
+              <Button color="default" to="/login" as={Link}>
                 Đăng nhập
               </Button>
             )}

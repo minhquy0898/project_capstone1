@@ -21,7 +21,7 @@ export interface IServiceItem {
   id: string;
   name: string;
   unit: string;
-  price: string;
+  price: number;
   quantity: number;
   note: string;
 }

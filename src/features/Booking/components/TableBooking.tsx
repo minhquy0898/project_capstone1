@@ -15,14 +15,24 @@ import {
 } from '../../Admin/apis/settingService.api';
 import { useEffect, useState } from 'react';
 
+const dataServicePack = [
+  {
+    id: '654b9d49bf030f180453fd94',
+    quantity: 12,
+    price: 5000,
+  },
+];
+
 function TableBooking() {
   const { data: services } = useAllService();
 
-  const { data: categoriesService } = useAllCategoriesService();
+  // const { data: categoriesService } = useAllCategoriesService();
 
-  console.log('categoriesService', categoriesService);
+  // console.log('categoriesService', categoriesService);
 
   const [selectedItems, setSelectedItems] = useState<string[]>([]);
+  const [totalAmount, setTotalAmount] = useState<number>(0);
+  const [error, setError] = useState<string>();
 
   const [listItem, setListItem] = useState<
     { id: string; quantity: number; price: number }[]
@@ -30,13 +40,24 @@ function TableBooking() {
 
   useEffect(() => {
     if (services?.data.renters?.length) {
-      setListItem(
-        services.data.renters.map((service) => ({
-          id: service.id,
-          price: Number(service.price),
-          quantity: 1,
-        })),
-      );
+      let listServicePack = [...dataServicePack];
+      const additionalServices = services.data.renters
+        .filter((service) =>
+          listServicePack.every(
+            (checkedService) => checkedService.id !== service.id,
+          ),
+        )
+        .map(({ id, price }) => ({ id, price, quantity: 1 }));
+
+      const listData = [...listServicePack, ...additionalServices];
+
+      setListItem(listData);
+    }
+  }, [services]);
+
+  useEffect(() => {
+    if (dataServicePack.length > 0) {
+      setSelectedItems(dataServicePack.map((service) => service.id));
     }
   }, [services]);
 
@@ -62,14 +83,27 @@ function TableBooking() {
         : [...prevSelectedItems, id],
     );
   };
+  console.log(selectedItems);
 
   const handleSubmit = () => {
+    setError('');
+    if (selectedItems.length < 1) {
+      setError('Vui lòng chọn thiết bị!');
+    }
     const objectSubmit = listItem.filter((item) =>
       selectedItems.includes(item.id),
     );
 
-    console.log('objectSubmit', objectSubmit);
+    console.log(objectSubmit);
+
+    const totalMoney = objectSubmit.reduce((total, service) => {
+      return total + service.quantity * service.price;
+    }, 0);
+
+    setTotalAmount(totalMoney);
   };
+
+  console.log('selected', typeof services?.data.renters[0].id);
 
   return (
     <>
@@ -88,6 +122,14 @@ function TableBooking() {
           <TableBody>
             {services.data.renters.map((serviceItem, index) => (
               <TableRow key={serviceItem.id}>
+                <TableCell>
+                  <Checkbox
+                    id={serviceItem.id}
+                    defaultSelected={selectedItems.includes(serviceItem.id)}
+                    checked
+                    onChange={() => handleCheckboxChange(serviceItem.id)}
+                  />
+                </TableCell>
                 <TableCell>{serviceItem.name}</TableCell>
                 <TableCell>{serviceItem.unit}</TableCell>
                 <TableCell>{serviceItem.price}</TableCell>
@@ -125,20 +167,20 @@ function TableBooking() {
                   </div>
                 </TableCell>
                 <TableCell>{serviceItem.note}</TableCell>
-                <TableCell>
-                  <Checkbox
-                    id={serviceItem.id}
-                    defaultChecked={selectedItems.includes(serviceItem.id)}
-                    onChange={() => handleCheckboxChange(serviceItem.id)}
-                  />
-                </TableCell>
               </TableRow>
             ))}
           </TableBody>
         </Table>
       )}
+      {error && <p className="text-danger text-xs">{error}</p>}
+      <Button className="mt-5" onClick={() => handleSubmit()}>
+        Xác nhận
+      </Button>
 
-      <button onClick={() => handleSubmit()}>check</button>
+      <p>
+        <b>Tổng cộng: </b>
+        <span>{totalAmount}vnd</span>
+      </p>
     </>
   );
 }

@@ -12,9 +12,10 @@ import CSelect from '../../../components/CSelect';
 import { useGetSettingOptionService } from '../apis/booking.api';
 
 const bookingSchema = Yup.object().shape({
-  // customerName: Yup.string().required('Vui lòng chọn loại dịch vụ!'),
-  // email: Yup.string().required('Vui lòng nhập địa chỉ!'),
-  // numberOfAttendes: Yup.string().required('Vui lòng nhập số điện thoại!'),
+  customerName: Yup.string().required('Vui lòng nhập tên!'),
+  email: Yup.string().required('Vui lòng nhập địa chỉ!'),
+  phoneNumber: Yup.string().required('Vui lòng nhập số điện thoại!'),
+  numberOfAttendes: Yup.number().required('Vui lòng nhập số lượng khách!'),
 });
 
 function Booking() {
@@ -108,9 +109,9 @@ function Booking() {
             />
           </div>
           <TableBooking />
-          {/* <Button className="mt-5" type="submit">
-            Submit
-          </Button> */}
+          <Button className="mt-5" type="submit">
+            Đặt đơn hàng
+          </Button>
         </form>
       </FormProvider>
     </div>

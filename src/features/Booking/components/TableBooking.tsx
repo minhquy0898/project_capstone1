@@ -23,7 +23,10 @@ const dataServicePack = [
   },
 ];
 
-function TableBooking() {
+type ITableBookingProps = {
+  handleConfirm: (item: any) => void;
+};
+function TableBooking({ handleConfirm }: ITableBookingProps) {
   const { data: services } = useAllService();
 
   // const { data: categoriesService } = useAllCategoriesService();
@@ -101,6 +104,7 @@ function TableBooking() {
     }, 0);
 
     setTotalAmount(totalMoney);
+    handleConfirm({ renters: objectSubmit, totalAmount: totalAmount });
   };
 
   console.log('selected', typeof services?.data.renters[0].id);

@@ -7,7 +7,7 @@ import CDatePicker from '../../../components/CDatePicker/CDatepicker';
 import { Button } from '@nextui-org/react';
 import { format } from 'date-fns';
 import { useAllCategoriesService } from '../../Admin/apis/settingService.api';
-import { useMemo } from 'react';
+import { useMemo, useState } from 'react';
 import CSelect from '../../../components/CSelect';
 import { useGetSettingOptionService } from '../apis/booking.api';
 
@@ -19,6 +19,7 @@ const bookingSchema = Yup.object().shape({
 });
 
 function Booking() {
+  const [dataServicePack, setDataServicePack] = useState();
   const methods = useFormWithYup(bookingSchema, {
     defaultValues: {
       customerName: '',
@@ -55,11 +56,19 @@ function Booking() {
     return [];
   }, [categoriesService?.data]);
 
+  const actionConfirm = (item: any | undefined) => {
+    console.log('item', item);
+  };
   const submitHandler = handleSubmit((values) => {
     const newScheduledTime = values.eventTime
       ? format(values.eventTime as unknown as Date, 'yyyy/MM/dd hh:mm')
       : '';
     console.log(newScheduledTime);
+
+    const submitValue = {
+      ...values,
+      eventTime: newScheduledTime,
+    };
   });
 
   return (
@@ -108,7 +117,7 @@ function Booking() {
               options={servicePackOptions}
             />
           </div>
-          <TableBooking />
+          <TableBooking handleConfirm={actionConfirm} />
           <Button className="mt-5" type="submit">
             Đặt đơn hàng
           </Button>

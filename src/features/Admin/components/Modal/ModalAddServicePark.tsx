@@ -15,11 +15,8 @@ import {
 } from '@nextui-org/react';
 import * as Yup from 'yup';
 import { FormProvider } from 'react-hook-form';
-import { MdOutlineAdd, MdOutlineEdit, MdPostAdd } from 'react-icons/md';
-import { Dispatch, ReactNode, useEffect, useMemo, useState } from 'react';
-import { toast } from 'react-toastify';
+import { ReactNode, useEffect, useMemo, useState } from 'react';
 
-import useFormWithYup from '../../../../hooks/useFormWithYup';
 import CInput from '../../../../components/CInput';
 import {
   useAllCategoriesService,
@@ -27,7 +24,7 @@ import {
 } from '../../apis/settingService.api';
 import { AiOutlineMinus, AiOutlinePlus } from 'react-icons/ai';
 import CSelect from '../../../../components/CSelect';
-import { useAddEvent } from '../../apis/event.api';
+import useFormWithYup from '../../../../hooks/useFormWithYup';
 
 const postSchema = Yup.object().shape({
   service: Yup.string().required('Vui lòng nhập trường này!'),
@@ -46,11 +43,9 @@ interface ModalAddServiceParkProps extends Omit<ModalProps, 'children'> {
 
 function ModalAddServicePark({
   isOpen,
-  onOpen,
   children,
   onOpenChange,
 }: ModalAddServiceParkProps) {
-  const [editorValue, setEditorValue] = useState('');
   const { data: services } = useAllService();
   const [selectedItems, setSelectedItems] = useState<string[]>([]);
   const [error, setError] = useState<string>();
@@ -64,7 +59,6 @@ function ModalAddServicePark({
   });
 
   const { data: allCategories } = useAllCategoriesService();
-  const { mutate: addEventMutate } = useAddEvent();
 
   const serviceOptions = useMemo(() => {
     if (allCategories?.data.services.length) {

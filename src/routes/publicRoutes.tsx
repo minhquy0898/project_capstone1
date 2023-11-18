@@ -4,6 +4,7 @@ import SideBySideLayout from '../layouts/SideBySideLayout';
 
 const LandingPage = lazy(() => import('../pages/LandingPage'));
 const Home = lazy(() => import('../pages/Home'));
+const Checkout = lazy(() => import('../features/Checkout/pages/Checkout'));
 const Login = lazy(() => import('../features/Authentication/pages/Login'));
 const Register = lazy(
   () => import('../features/Authentication/pages/Register'),
@@ -43,6 +44,10 @@ const publicRoutes: IRoute[] = [
   {
     page: <EventServiceDetail />,
     path: 'dich-vu/:id',
+  },
+  {
+    page: <Checkout />,
+    path: 'thanh-toan',
   },
 ];
 

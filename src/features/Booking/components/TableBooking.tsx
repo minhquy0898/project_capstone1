@@ -94,6 +94,7 @@ function TableBooking() {
                 <TableCell>
                   <div className="flex gap-1 items-center">
                     <Button
+                      disabled={listItem[index]?.quantity === 1}
                       size="sm"
                       isIconOnly
                       onClick={() =>
@@ -107,6 +108,9 @@ function TableBooking() {
                     </Button>
                     <span>{listItem[index]?.quantity}</span>
                     <Button
+                      disabled={
+                        listItem[index]?.quantity === serviceItem.quantity
+                      }
                       size="sm"
                       isIconOnly
                       onClick={() =>

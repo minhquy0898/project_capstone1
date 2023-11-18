@@ -8,6 +8,7 @@ const Admin = lazy(() => import('../features/Admin/pages/Admin'));
 const SettingEvent = lazy(() => import('../features/Admin/pages/SettingEvent'));
 const Post = lazy(() => import('../features/Admin/pages/Post'));
 const Service = lazy(() => import('../features/Admin/pages/Service'));
+const ServicePack = lazy(() => import('../features/Admin/pages/ServicePack'));
 const SettingServiceOptions = lazy(
   () => import('../features/Admin/pages/SettingServiceOptions'),
 );
@@ -46,6 +47,12 @@ const protectedRoutes: IRoute[] = [
   {
     page: <SettingEvent />,
     path: 'setting-event',
+    layout: SidebarLayout,
+    role: ['admin'],
+  },
+  {
+    page: <ServicePack />,
+    path: 'setting-service-park',
     layout: SidebarLayout,
     role: ['admin'],
   },

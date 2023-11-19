@@ -10,6 +10,7 @@ import { useAllCategoriesService } from '../../Admin/apis/settingService.api';
 import { useMemo, useState } from 'react';
 import CSelect from '../../../components/CSelect';
 import { useGetSettingOptionService } from '../apis/booking.api';
+import { IRenterItemPay } from '../../../types/common';
 
 const bookingSchema = Yup.object().shape({
   name: Yup.string().required('Vui lòng nhập tên!'),
@@ -20,7 +21,7 @@ const bookingSchema = Yup.object().shape({
 
 function Booking() {
   const [dataServicePack, setDataServicePack] = useState();
-  const [datarenters, setDataRenters] = useState();
+  const [datarenters, setDataRenters] = useState<IRenterItemPay>();
 
   const methods = useFormWithYup(bookingSchema, {
     defaultValues: {
@@ -48,17 +49,17 @@ function Booking() {
   const { data: dataOptions } = useGetSettingOptionService(watchService);
   console.log('dataOptions', dataOptions);
 
-  const servicePackOptions = useMemo(() => {
-    if (dataOptions?.data.setting.length) {
-      return dataOptions?.data.setting.map((setting) => ({
-        label: setting.name,
-        value: setting.id,
-      }));
-    }
-    return [];
-  }, [categoriesService?.data]);
+  // const servicePackOptions = useMemo(() => {
+  //   if (dataOptions?.data.setting.length) {
+  //     return dataOptions?.data.setting.map((setting) => ({
+  //       label: setting.name,
+  //       value: setting.id,
+  //     }));
+  //   }
+  //   return [];
+  // }, [categoriesService?.data]);
 
-  const actionConfirm = (item: any | undefined) => {
+  const actionConfirm = (item: IRenterItemPay | undefined) => {
     setDataRenters(item);
   };
   const submitHandler = handleSubmit((values) => {
@@ -70,8 +71,8 @@ function Booking() {
     const submitValue = {
       ...values,
       eventTime: newScheduledTime,
-      // renters: datarenters?.renters ?? [],
-      // totalAmount: datarenters?.totalAmount,
+      renters: datarenters?.renters ?? [],
+      totalAmount: datarenters?.totalAmount,
     };
     console.log('submitValue', submitValue);
   });
@@ -103,7 +104,7 @@ function Booking() {
               placeholderText="Nhập thời gian tổ chức"
             />
 
-            <CSelect
+            {/* <CSelect
               id="service"
               name="service"
               placeholder="Chọn dịch vụ"
@@ -117,7 +118,7 @@ function Booking() {
               placeholder="Gói dịch vụ"
               label="Dịch vụ"
               options={servicePackOptions}
-            />
+            /> */}
           </div>
           <TableBooking handleConfirm={actionConfirm} />
           <Button className="mt-5" type="submit">

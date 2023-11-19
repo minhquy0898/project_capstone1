@@ -14,6 +14,7 @@ import {
   useAllService,
 } from '../../Admin/apis/settingService.api';
 import { useEffect, useState } from 'react';
+import { IRenterItemPay } from '../../../types/common';
 
 const dataServicePack = [
   {
@@ -24,7 +25,7 @@ const dataServicePack = [
 ];
 
 type ITableBookingProps = {
-  handleConfirm: (item: any) => void;
+  handleConfirm: (item: IRenterItemPay) => void;
 };
 function TableBooking({ handleConfirm }: ITableBookingProps) {
   const { data: services } = useAllService();
@@ -104,7 +105,10 @@ function TableBooking({ handleConfirm }: ITableBookingProps) {
     }, 0);
 
     setTotalAmount(totalMoney);
-    handleConfirm({ renters: objectSubmit, totalAmount: totalAmount });
+    handleConfirm({
+      renters: objectSubmit,
+      totalAmount: totalAmount,
+    } as unknown as IRenterItemPay);
   };
 
   console.log('selected', typeof services?.data.renters[0].id);

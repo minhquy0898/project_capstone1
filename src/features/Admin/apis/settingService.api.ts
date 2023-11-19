@@ -202,10 +202,9 @@ export const useAddServicePack = (
  * Lấy ra tất cả services pack
  */
 const getAllServicesPack = async () => {
-  const res =
-    await http.get<IGenericResponse<{ services: IServiceInfomation[] }>>(
-      'service',
-    );
+  const res = await http.get<
+    IGenericResponse<{ services: IServiceInfomation[] }>
+  >('service/service_pack');
   return res.data;
 };
 

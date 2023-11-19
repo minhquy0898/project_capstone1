@@ -72,41 +72,6 @@ function ModalAddServicePark({
     return [];
   }, [allCategories?.data]);
 
-  const { handleSubmit, reset } = methods;
-
-  const { mutate: addServicePack } = useAddServicePack();
-
-  const submitHandler = handleSubmit((values) => {
-    setError('');
-    if (selectedItems.length < 1) {
-      setError('Vui lòng chọn thiết bị!');
-    }
-    const valueSubmit = {
-      servicePack: values.servicePack,
-      renters: listItem.filter((item) => selectedItems.includes(item.id)),
-    };
-    console.log('@3242', values.service);
-
-    addServicePack(
-      {
-        idService: values.service,
-        payload: valueSubmit,
-      },
-      {
-        onSuccess(dataRes) {
-          if (dataRes.isFlag) {
-            toast.success('Thêm gói dịch vụ thành công!');
-            reset(initValue);
-            setListItem([]);
-            onOpenChange!(false);
-          } else {
-            toast.error('Thêm thất bại!');
-          }
-        },
-      },
-    );
-  });
-
   const handleCheckboxChange = (id: string) => {
     const isSelected = selectedItems.includes(id);
     setSelectedItems((prevSelectedItems) =>
@@ -130,7 +95,39 @@ function ModalAddServicePark({
     setListItem(updatedList);
   };
 
-  console.log('serviceOptions', allCategories);
+  const { handleSubmit, reset } = methods;
+
+  const { mutate: addServicePack } = useAddServicePack();
+
+  const submitHandler = handleSubmit((values) => {
+    setError('');
+    if (selectedItems.length < 1) {
+      setError('Vui lòng chọn thiết bị!');
+    }
+    const valueSubmit = {
+      servicePack: values.servicePack,
+      renters: listItem.filter((item) => selectedItems.includes(item.id)),
+    };
+
+    addServicePack(
+      {
+        idService: values.service,
+        payload: valueSubmit,
+      },
+      {
+        onSuccess(dataRes) {
+          if (dataRes.status === 200) {
+            toast.success('Thêm gói dịch vụ thành công!');
+            reset(initValue);
+            setListItem([]);
+            onOpenChange!(false);
+          } else {
+            toast.error('Thêm thất bại!');
+          }
+        },
+      },
+    );
+  });
 
   useEffect(() => {
     if (services?.data.renters?.length) {

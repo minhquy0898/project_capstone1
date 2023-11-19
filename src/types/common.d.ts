@@ -30,3 +30,11 @@ export interface ISelectOption {
   label: string;
   value: string | number;
 }
+
+export interface IRenterItem
+  extends Omit<IServiceItem, 'name' | 'unit' | 'note'> {}
+
+export interface IRenterItemPay {
+  renters: IRenterItem;
+  totalAmount: number;
+}

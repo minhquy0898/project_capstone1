@@ -5,6 +5,7 @@ export interface IService {
   updatedAt: string;
 }
 export interface IServiceItem {
+  id: string;
   quantity: number;
   price: number;
   renter: {

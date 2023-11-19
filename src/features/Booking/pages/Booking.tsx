@@ -6,10 +6,13 @@ import CInput from '../../../components/CInput';
 import CDatePicker from '../../../components/CDatePicker/CDatepicker';
 import { Button } from '@nextui-org/react';
 import { format } from 'date-fns';
-import { useAllCategoriesService } from '../../Admin/apis/settingService.api';
+import {
+  useAllCategoriesService,
+  useAllServicePack,
+} from '../../Admin/apis/settingService.api';
 import { useMemo, useState } from 'react';
 import CSelect from '../../../components/CSelect';
-import { useGetSettingOptionService } from '../apis/booking.api';
+import { useAddBooking, useGetSettingOptionService } from '../apis/booking.api';
 import { IRenterItemPay } from '../../../types/common';
 
 const bookingSchema = Yup.object().shape({
@@ -20,7 +23,6 @@ const bookingSchema = Yup.object().shape({
 });
 
 function Booking() {
-  const [dataServicePack, setDataServicePack] = useState();
   const [datarenters, setDataRenters] = useState<IRenterItemPay>();
 
   const methods = useFormWithYup(bookingSchema, {
@@ -33,45 +35,59 @@ function Booking() {
     },
   });
   const { data: categoriesService } = useAllCategoriesService();
+  const { data: listServicePack } = useAllServicePack();
 
   const serviceOptions = useMemo(() => {
     if (categoriesService?.data.services.length) {
-      return categoriesService?.data.services.map((serviceItem) => ({
-        label: serviceItem.title,
-        value: serviceItem.id,
-      }));
+      return (
+        categoriesService?.data.services.map((serviceItem) => ({
+          label: serviceItem.title,
+          value: serviceItem.id,
+        })) || []
+      );
     }
     return [];
   }, [categoriesService?.data]);
 
   const { handleSubmit, watch } = methods;
   const watchService = watch('service');
-  const { data: dataOptions } = useGetSettingOptionService(watchService);
-  console.log('dataOptions', dataOptions);
 
-  // const servicePackOptions = useMemo(() => {
-  //   if (dataOptions?.data.setting.length) {
-  //     return dataOptions?.data.setting.map((setting) => ({
-  //       label: setting.name,
-  //       value: setting.id,
-  //     }));
-  //   }
-  //   return [];
-  // }, [categoriesService?.data]);
+  const servicePackOptions = useMemo(() => {
+    if (listServicePack?.data.services.length) {
+      const targetService = listServicePack.data.services.find(
+        (service) => service.id === watchService,
+      );
+      return targetService?.settings.map((setting) => ({
+        label: setting.name,
+        value: setting.name,
+      }));
+    }
+    return [];
+  }, [categoriesService?.data, watchService]);
+
+  const watchServicePack = watch('servicePack');
+  const { data: servicePackItem } = useGetSettingOptionService(
+    watchService,
+    watchServicePack,
+  );
 
   const actionConfirm = (item: IRenterItemPay | undefined) => {
     setDataRenters(item);
   };
+
+  const { mutate: addBooking } = useAddBooking();
   const submitHandler = handleSubmit((values) => {
     const newScheduledTime = values.eventTime
       ? format(values.eventTime as unknown as Date, 'yyyy/MM/dd hh:mm')
       : '';
-    console.log('1', typeof newScheduledTime);
 
     const submitValue = {
       ...values,
       eventTime: newScheduledTime,
-      renters: datarenters?.renters ?? [],
+      renters: datarenters?.renters.map((renter) => ({
+        renter: renter.id,
+        quantity: renter.quantity,
+      })),
       totalAmount: datarenters?.totalAmount,
     };
     console.log('submitValue', submitValue);
@@ -104,7 +120,7 @@ function Booking() {
               placeholderText="Nhập thời gian tổ chức"
             />
 
-            {/* <CSelect
+            <CSelect
               id="service"
               name="service"
               placeholder="Chọn dịch vụ"
@@ -117,10 +133,13 @@ function Booking() {
               name="servicePack"
               placeholder="Gói dịch vụ"
               label="Dịch vụ"
-              options={servicePackOptions}
-            /> */}
+              options={servicePackOptions ?? []}
+            />
           </div>
-          <TableBooking handleConfirm={actionConfirm} />
+          <TableBooking
+            handleConfirm={actionConfirm}
+            renterList={servicePackItem?.data?.setting?.renters ?? []}
+          />
           <Button className="mt-5" type="submit">
             Đặt đơn hàng
           </Button>

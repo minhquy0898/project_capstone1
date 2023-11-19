@@ -35,6 +35,6 @@ export interface IRenterItem
   extends Omit<IServiceItem, 'name' | 'unit' | 'note'> {}
 
 export interface IRenterItemPay {
-  renters: IRenterItem;
+  renters: IRenterItem[];
   totalAmount: number;
 }

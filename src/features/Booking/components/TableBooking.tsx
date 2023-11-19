@@ -18,11 +18,12 @@ type ITableBookingProps = {
   handleConfirm: (item: IRenterItemPay) => void;
   renterList: IRenterItem[] | [];
 };
-
 function TableBooking({ handleConfirm, renterList }: ITableBookingProps) {
-  const [selectedItems, setSelectedItems] = useState<string[]>([]);
-  const [selectedKeys, setSelectedKeys] = React.useState(new Set(['2']));
-  const [totalAmount, setTotalAmount] = useState<number>(0);
+  // const [selectedKeys, setSelectedKeys] = React.useState(new Set([]));
+  const [selectedItems, setSelectedItems] = useState<string[]>(
+    renterList.map((service) => service.id),
+  );
+  const [totalAmount, setTotalAmount] = useState<number>();
   const [listItem, setListItem] = useState<IRenterItem[]>([]);
   const [error, setError] = useState<string>();
   const { data: services } = useAllService();
@@ -41,19 +42,12 @@ function TableBooking({ handleConfirm, renterList }: ITableBookingProps) {
       const listData = [...listServicePack, ...additionalServices];
 
       setListItem(listData);
-      const totalMoney = renterList.reduce((total, service) => {
-        return total + service.quantity * service.price;
-      }, 0);
+      // set so tien mac dinh theo goi
+      // const totalMoney = renterList.reduce((total, service) => {
+      //   return total + service.quantity * service.price;
+      // }, 0);
 
-      setTotalAmount(totalMoney);
-    }
-  }, [renterList]);
-
-  useEffect(() => {
-    if (renterList.length > 0) {
-      setSelectedItems(renterList.map((service) => service.id));
-    } else {
-      setSelectedItems([]);
+      // setTotalAmount(totalMoney);
     }
   }, [renterList]);
 
@@ -79,8 +73,11 @@ function TableBooking({ handleConfirm, renterList }: ITableBookingProps) {
         : [...prevSelectedItems, id],
     );
   };
+  console.log(selectedItems);
 
   const handleSubmit = () => {
+    console.log('selectedItems', selectedItems);
+
     setError('');
     if (selectedItems.length < 1) {
       setError('Vui lòng chọn thiết bị!');
@@ -89,30 +86,29 @@ function TableBooking({ handleConfirm, renterList }: ITableBookingProps) {
     const objectSubmit = listItem.filter((item) =>
       selectedItems.includes(item.id),
     );
+
     const totalMoney = objectSubmit.reduce((total, service) => {
       return total + service.quantity * service.price;
     }, 0);
 
     setTotalAmount(totalMoney);
+    console.log('totalMoney', totalMoney);
+
+    console.log('selectedItems', totalAmount);
 
     handleConfirm({
       renters: objectSubmit,
       totalAmount: totalAmount,
     } as unknown as IRenterItemPay);
   };
-  console.log(
-    'selectedItems',
-    selectedItems[0] === services?.data.renters[0].id,
-  );
-  console.log('services', services);
 
   return (
     <>
       {services && services.data.renters.length > 0 && (
         <Table
-          aria-label="Example table with dynamic content"
-          selectionMode="multiple"
-          selectedKeys={selectedKeys}
+          aria-label="Controlled table example with dynamic content"
+          // selectionMode="multiple"
+          // selectedKeys={selectedKeys}
           // onSelectionChange={setSelectedKeys}
         >
           <TableHeader>
@@ -125,17 +121,15 @@ function TableBooking({ handleConfirm, renterList }: ITableBookingProps) {
             <TableColumn>Số lượng</TableColumn>
             <TableColumn>Ghi chú</TableColumn>
           </TableHeader>
-          <TableBody items={services.data.renters ?? []}>
-            {(serviceItem) => (
+          <TableBody>
+            {services.data.renters.map((serviceItem, index) => (
               <TableRow key={serviceItem.id}>
                 <TableCell>
                   <Checkbox
-                    isSelected={
-                      selectedItems[0] === services?.data.renters[0].id
-                    }
-                    // defaultSelected={
-                    //   selectedItems[0] === '654b9d49bf030f180453fd94'
-                    // }
+                    id={serviceItem.id}
+                    defaultChecked={selectedItems.includes(
+                      String(serviceItem.id),
+                    )}
                     onChange={() => handleCheckboxChange(serviceItem.id)}
                   />
                 </TableCell>
@@ -145,40 +139,29 @@ function TableBooking({ handleConfirm, renterList }: ITableBookingProps) {
                 <TableCell>
                   <div className="flex gap-1 items-center">
                     <Button
-                      disabled={
-                        listItem.find((item) => item.id === serviceItem.id)
-                          ?.quantity === 1
-                      }
+                      disabled={listItem[index]?.quantity === 1}
                       size="sm"
                       isIconOnly
                       onClick={() =>
                         setQuantityForItem(
                           serviceItem.id,
-                          listItem.find((item) => item.id === serviceItem.id)
-                            ?.quantity ?? 1 - 1,
+                          listItem[index].quantity - 1,
                         )
                       }
                     >
                       <AiOutlineMinus />
                     </Button>
-                    <span>
-                      {
-                        listItem.find((item) => item.id === serviceItem.id)
-                          ?.quantity
-                      }
-                    </span>
+                    <span>{listItem[index]?.quantity}</span>
                     <Button
                       disabled={
-                        listItem.find((item) => item.id === serviceItem.id)
-                          ?.quantity === serviceItem.quantity
+                        listItem[index]?.quantity === serviceItem.quantity
                       }
                       size="sm"
                       isIconOnly
                       onClick={() =>
                         setQuantityForItem(
                           serviceItem.id,
-                          listItem.find((item) => item.id === serviceItem.id)
-                            ?.quantity ?? 1 + 1,
+                          listItem[index].quantity + 1,
                         )
                       }
                     >
@@ -188,7 +171,7 @@ function TableBooking({ handleConfirm, renterList }: ITableBookingProps) {
                 </TableCell>
                 <TableCell>{serviceItem.note}</TableCell>
               </TableRow>
-            )}
+            ))}
           </TableBody>
         </Table>
       )}

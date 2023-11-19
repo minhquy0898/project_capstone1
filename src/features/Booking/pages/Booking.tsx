@@ -30,6 +30,7 @@ function Booking() {
       name: '',
       email: '',
       phone: '',
+      address: '',
       numberOfAttendes: '',
       eventTime: null,
     },

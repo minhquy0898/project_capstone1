@@ -12,19 +12,21 @@ import CSelect from '../../../components/CSelect';
 import { useGetSettingOptionService } from '../apis/booking.api';
 
 const bookingSchema = Yup.object().shape({
-  customerName: Yup.string().required('Vui lòng nhập tên!'),
+  name: Yup.string().required('Vui lòng nhập tên!'),
   email: Yup.string().required('Vui lòng nhập địa chỉ!'),
-  phoneNumber: Yup.string().required('Vui lòng nhập số điện thoại!'),
+  phone: Yup.string().required('Vui lòng nhập số điện thoại!'),
   numberOfAttendes: Yup.number().required('Vui lòng nhập số lượng khách!'),
 });
 
 function Booking() {
   const [dataServicePack, setDataServicePack] = useState();
+  const [datarenters, setDataRenters] = useState();
+
   const methods = useFormWithYup(bookingSchema, {
     defaultValues: {
-      customerName: '',
+      name: '',
       email: '',
-      phoneNumber: '',
+      phone: '',
       numberOfAttendes: '',
       eventTime: null,
     },
@@ -57,18 +59,21 @@ function Booking() {
   }, [categoriesService?.data]);
 
   const actionConfirm = (item: any | undefined) => {
-    console.log('item', item);
+    setDataRenters(item);
   };
   const submitHandler = handleSubmit((values) => {
     const newScheduledTime = values.eventTime
       ? format(values.eventTime as unknown as Date, 'yyyy/MM/dd hh:mm')
       : '';
-    console.log(newScheduledTime);
+    console.log('1', typeof newScheduledTime);
 
     const submitValue = {
       ...values,
       eventTime: newScheduledTime,
+      // renters: datarenters?.renters ?? [],
+      // totalAmount: datarenters?.totalAmount,
     };
+    console.log('submitValue', submitValue);
   });
 
   return (
@@ -77,11 +82,7 @@ function Booking() {
         <form onSubmit={submitHandler}>
           <label>THÔNG TIN KHÁCH HÀNG</label>
           <div className="w-1/3">
-            <CInput
-              label="Tên khách hàng"
-              name="customerName"
-              id="customerName"
-            />
+            <CInput label="Tên khách hàng" name="name" id="name" />
 
             <CInput
               label="Địa chỉ email"
@@ -89,13 +90,14 @@ function Booking() {
               id="email"
               type="email"
             />
-            <CInput label="Số điện thoại" name="phoneNumber" id="phoneNumber" />
+            <CInput label="Số điện thoại" name="phone" id="phone" />
 
             <CInput
               label="Lượng khách dự kiến"
               name="numberOfAttendes"
-              id="phoneNumber"
+              id="numberOfAttendes"
             />
+            <CInput label="Địa chỉ" name="address" id="address" />
             <CDatePicker
               name="eventTime"
               placeholderText="Nhập thời gian tổ chức"

@@ -134,7 +134,7 @@ function TableBooking({ handleConfirm }: ITableBookingProps) {
                     onChange={() => handleCheckboxChange(serviceItem.id)}
                   />
                 </TableCell>
-                <TableCell>{serviceItem.name}</TableCell>
+                <>{serviceItem.name}</>
                 <TableCell>{serviceItem.unit}</TableCell>
                 <TableCell>{serviceItem.price}</TableCell>
                 <TableCell>

@@ -4,14 +4,26 @@ export interface IService {
   createdAt: string;
   updatedAt: string;
 }
+export interface IServiceItem {
+  quantity: number;
+  price: number;
+  renter: {
+    id: string;
+    name: string;
+    unit: string;
+    price: number;
+    quantity: number;
+    note: string;
+  };
+}
 
-export interface IRenter {
-  id: string;
-  renter: IServiceItem;
+export interface IServicePackInfomation {
+  name: string;
+  renters: IServiceItem[];
 }
 
 export interface IServiceInfomation {
   id: string;
-  name: string;
-  renters: IRenter[];
+  title: string;
+  settings: IServicePackInfomation[];
 }

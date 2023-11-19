@@ -19,12 +19,14 @@ import { ReactNode, useEffect, useMemo, useState } from 'react';
 
 import CInput from '../../../../components/CInput';
 import {
+  useAddServicePack,
   useAllCategoriesService,
   useAllService,
 } from '../../apis/settingService.api';
 import { AiOutlineMinus, AiOutlinePlus } from 'react-icons/ai';
 import CSelect from '../../../../components/CSelect';
 import useFormWithYup from '../../../../hooks/useFormWithYup';
+import { toast } from 'react-toastify';
 
 const postSchema = Yup.object().shape({
   service: Yup.string().required('Vui lòng nhập trường này!'),
@@ -72,16 +74,37 @@ function ModalAddServicePark({
 
   const { handleSubmit, reset } = methods;
 
+  const { mutate: addServicePack } = useAddServicePack();
+
   const submitHandler = handleSubmit((values) => {
     setError('');
     if (selectedItems.length < 1) {
       setError('Vui lòng chọn thiết bị!');
     }
     const valueSubmit = {
-      ...values,
+      servicePack: values.servicePack,
       renters: listItem.filter((item) => selectedItems.includes(item.id)),
     };
-    console.log(valueSubmit);
+    console.log('@3242', values.service);
+
+    addServicePack(
+      {
+        idService: values.service,
+        payload: valueSubmit,
+      },
+      {
+        onSuccess(dataRes) {
+          if (dataRes.isFlag) {
+            toast.success('Thêm gói dịch vụ thành công!');
+            reset(initValue);
+            setListItem([]);
+            onOpenChange!(false);
+          } else {
+            toast.error('Thêm thất bại!');
+          }
+        },
+      },
+    );
   });
 
   const handleCheckboxChange = (id: string) => {
@@ -107,6 +130,8 @@ function ModalAddServicePark({
     setListItem(updatedList);
   };
 
+  console.log('serviceOptions', allCategories);
+
   useEffect(() => {
     if (services?.data.renters?.length) {
       setListItem(
@@ -125,6 +150,7 @@ function ModalAddServicePark({
         size="5xl"
         onClose={() => {
           reset(initValue);
+          setListItem([]);
         }}
         isOpen={isOpen}
         onOpenChange={onOpenChange}

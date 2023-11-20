@@ -32,6 +32,22 @@ export const useAddService = () => {
 };
 
 /**
+ * Lấy ra tất cả services
+ */
+const getAllServicesApi = async () => {
+  const res =
+    await http.get<IGenericResponse<{ renters: IServiceItem[] }>>('renter');
+  return res.data;
+};
+
+export const useAllService = () => {
+  return useQuery({
+    queryKey: ['get-all-services'],
+    queryFn: getAllServicesApi,
+  });
+};
+
+/**
  * Edit
  */
 const editService = async ({ id, ...restService }: IServiceItem) => {
@@ -47,27 +63,9 @@ export const useEditService = () => {
 
   return useMutation({
     mutationFn: editService,
-    onSuccess(data) {
-      if (data.isSuccess) {
-        queryClient.invalidateQueries(['get-all-services']);
-      }
+    onSuccess() {
+      queryClient.invalidateQueries(['get-all-services']);
     },
-  });
-};
-
-/**
- * Lấy ra tất cả services
- */
-const getAllServicesApi = async () => {
-  const res =
-    await http.get<IGenericResponse<{ renters: IServiceItem[] }>>('renter');
-  return res.data;
-};
-
-export const useAllService = () => {
-  return useQuery({
-    queryKey: ['get-all-services'],
-    queryFn: getAllServicesApi,
   });
 };
 

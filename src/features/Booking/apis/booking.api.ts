@@ -22,21 +22,6 @@ export const useAllEvent = () => {
   });
 };
 
-// const dataService = [
-//     {
-//       renter: services?.data.renters[0].id,
-//       quantity: 5,
-//     },
-//     {
-//       renter: services?.data.renters[1].id,
-//       quantity: 6,
-//     },
-//     {
-//       renter: services?.data.renters[1].id,
-//       quantity: 7,
-//     },
-//   ];
-
 /**
  * get setting option in service
  */

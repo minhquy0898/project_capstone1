@@ -29,6 +29,11 @@ const sidebarItems: ISidebarOption[] = [
     path: '/setting-event',
     role: ['admin'],
   },
+  {
+    name: 'Quản lý gói dịch vụ',
+    path: '/setting-service-park',
+    role: ['admin'],
+  },
 ];
 
 function SidebarLayout({ children }: SidebarLayoutProps) {

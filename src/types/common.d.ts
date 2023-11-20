@@ -21,12 +21,20 @@ export interface IServiceItem {
   id: string;
   name: string;
   unit: string;
-  price: string;
-  quantity: string;
+  price: number;
+  quantity: number;
   note: string;
 }
 
 export interface ISelectOption {
   label: string;
   value: string | number;
+}
+
+export interface IRenterItem
+  extends Omit<IServiceItem, 'name' | 'unit' | 'note'> {}
+
+export interface IRenterItemPay {
+  renters: IRenterItem[];
+  totalAmount: number;
 }

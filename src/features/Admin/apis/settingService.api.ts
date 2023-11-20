@@ -1,7 +1,9 @@
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
+
 import http from '../../../config/axios.config';
 import { IGenericResponse, IServiceItem } from '../../../types/common';
-import { IService } from '../../../types/service';
+import { IService, IServiceInfomation } from '../../../types/service';
+import { MutationConfig } from '../../../config/react-query.config';
 
 /**
  * Thêm
@@ -30,6 +32,22 @@ export const useAddService = () => {
 };
 
 /**
+ * Lấy ra tất cả services
+ */
+const getAllServicesApi = async () => {
+  const res =
+    await http.get<IGenericResponse<{ renters: IServiceItem[] }>>('renter');
+  return res.data;
+};
+
+export const useAllService = () => {
+  return useQuery({
+    queryKey: ['get-all-services'],
+    queryFn: getAllServicesApi,
+  });
+};
+
+/**
  * Edit
  */
 const editService = async ({ id, ...restService }: IServiceItem) => {
@@ -45,27 +63,9 @@ export const useEditService = () => {
 
   return useMutation({
     mutationFn: editService,
-    onSuccess(data) {
-      if (data.isSuccess) {
-        queryClient.invalidateQueries(['get-all-services']);
-      }
+    onSuccess() {
+      queryClient.invalidateQueries(['get-all-services']);
     },
-  });
-};
-
-/**
- * Lấy ra tất cả services
- */
-const getAllServicesApi = async () => {
-  const res =
-    await http.get<IGenericResponse<{ renters: IServiceItem[] }>>('renter');
-  return res.data;
-};
-
-export const useAllService = () => {
-  return useQuery({
-    queryKey: ['get-all-services'],
-    queryFn: getAllServicesApi,
   });
 };
 
@@ -163,5 +163,52 @@ export const useDeleteCategory = () => {
         queryClient.invalidateQueries(['get-all-categories-service']);
       }
     },
+  });
+};
+
+export const addServicePack = async ({
+  idService,
+  payload,
+}: {
+  idService: string;
+  payload: any;
+}) => {
+  const { data } = await http.post<any>(
+    `/service/${idService}/setting`,
+    payload,
+  );
+
+  return data;
+};
+
+export const useAddServicePack = (
+  config?: MutationConfig<typeof addServicePack>,
+) => {
+  const queryClient = useQueryClient();
+  return useMutation({
+    onSuccess: (dataRes) => {
+      if (dataRes.isFlag) {
+        queryClient.invalidateQueries(['get-all-services-pack']);
+      }
+    },
+    mutationFn: addServicePack,
+    ...config,
+  });
+};
+
+/**
+ * Lấy ra tất cả services pack
+ */
+const getAllServicesPack = async () => {
+  const res = await http.get<
+    IGenericResponse<{ services: IServiceInfomation[] }>
+  >('service/service_pack');
+  return res.data;
+};
+
+export const useAllServicePack = () => {
+  return useQuery({
+    queryKey: ['get-all-services-pack'],
+    queryFn: getAllServicesPack,
   });
 };

@@ -12,7 +12,7 @@ import {
 } from '../../Admin/apis/settingService.api';
 import { useMemo, useState } from 'react';
 import CSelect from '../../../components/CSelect';
-import { useAddBooking, useGetSettingOptionService } from '../apis/booking.api';
+import { useGetSettingOptionService } from '../apis/booking.api';
 import { IRenterItemPay } from '../../../types/common';
 
 const bookingSchema = Yup.object().shape({
@@ -76,7 +76,7 @@ function Booking() {
     setDataRenters(item);
   };
 
-  const { mutate: addBooking } = useAddBooking();
+  // const { mutate: addBooking } = useAddBooking();
   const submitHandler = handleSubmit((values) => {
     const newScheduledTime = values.eventTime
       ? format(values.eventTime as unknown as Date, 'yyyy/MM/dd hh:mm')

@@ -12,7 +12,6 @@ import { AiOutlineMinus, AiOutlinePlus } from 'react-icons/ai';
 import { useAllService } from '../../Admin/apis/settingService.api';
 import { useEffect, useState } from 'react';
 import { IRenterItem, IRenterItemPay } from '../../../types/common';
-import React from 'react';
 
 type ITableBookingProps = {
   handleConfirm: (item: IRenterItemPay) => void;

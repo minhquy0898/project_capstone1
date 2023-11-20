@@ -2,11 +2,7 @@ import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import http from '../../../config/axios.config';
 import { IGenericResponse } from '../../../types/common';
 import { IEvent } from '../../../types/event';
-import {
-  IService,
-  IServiceInfomation,
-  IServicePackInfomation,
-} from '../../../types/service';
+import { IServicePackInfomation } from '../../../types/service';
 import { MutationConfig } from '../../../config/react-query.config';
 import { IBooking } from '../../../types/booking';
 

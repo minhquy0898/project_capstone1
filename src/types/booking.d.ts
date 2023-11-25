@@ -1,12 +1,22 @@
-import { NumberFieldAria } from 'react-aria';
+export interface IRenter {
+  renter: string;
+  quantity: number;
+  price: number;
+}
 
-interface IBooking {
-  renters: [
-    {
-      renter: string;
-      quantity: number;
-    },
-  ];
+export interface ICheckoutBody {
+  renters: IRenter[];
+  method: string;
+  paypalId: string;
+  address: string;
+  phone: string;
+  email: string;
+  numberOfAttendes: number;
+  eventTime: string;
+}
+
+export interface IBooking extends ICheckoutBody {
+  renters: IRenter[];
   event: string;
   address: string;
   phone: string;

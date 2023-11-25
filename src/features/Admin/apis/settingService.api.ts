@@ -34,9 +34,15 @@ export const useAddService = () => {
 /**
  * Lấy ra tất cả services
  */
+interface IGetAllServicesApi extends Omit<IServiceItem, 'id'> {
+  _id: string;
+}
+
 const getAllServicesApi = async () => {
   const res =
-    await http.get<IGenericResponse<{ renters: IServiceItem[] }>>('renter');
+    await http.get<IGenericResponse<{ renters: IGetAllServicesApi[] }>>(
+      'renter',
+    );
   return res.data;
 };
 

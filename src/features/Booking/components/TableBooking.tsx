@@ -1,6 +1,7 @@
 import {
   Button,
   Checkbox,
+  Spinner,
   Table,
   TableBody,
   TableCell,
@@ -8,182 +9,167 @@ import {
   TableHeader,
   TableRow,
 } from '@nextui-org/react';
+import { useSearchParams } from 'react-router-dom';
+import { useEffect } from 'react';
 import { AiOutlineMinus, AiOutlinePlus } from 'react-icons/ai';
-import { useAllService } from '../../Admin/apis/settingService.api';
-import { useEffect, useState } from 'react';
-import { IRenterItem, IRenterItemPay } from '../../../types/common';
 
-type ITableBookingProps = {
-  handleConfirm: (item: IRenterItemPay) => void;
-  renterList: IRenterItem[] | [];
-};
-function TableBooking({ handleConfirm, renterList }: ITableBookingProps) {
-  // const [selectedKeys, setSelectedKeys] = React.useState(new Set([]));
-  const [selectedItems, setSelectedItems] = useState<string[]>(
-    renterList.map((service) => service.id),
+import { useGetSettingOptionService } from '../apis/booking.api';
+import { useAllService } from '../../Admin/apis/settingService.api';
+import { useBookingCart, useBookingStoreActions } from '../store/booking.store';
+import { IRenter } from '../../../types/booking';
+import NumberFormat from '../../../components/NumberFormat';
+
+function TableBooking() {
+  const [searchParams] = useSearchParams();
+  const bookingCart = useBookingCart();
+  const { setBookingCart, setInitBookingCart } = useBookingStoreActions();
+  // const { data: categoriesService } = useAllCategoriesService();
+  const { data: allServices, isLoading: isLoadingAllService } = useAllService();
+
+  const { data: servicePackItem } = useGetSettingOptionService(
+    searchParams.get('service') as string,
+    searchParams.get('servicePack') as string,
   );
-  const [totalAmount, setTotalAmount] = useState<number>();
-  const [listItem, setListItem] = useState<IRenterItem[]>([]);
-  const [error, setError] = useState<string>();
-  const { data: services } = useAllService();
 
   useEffect(() => {
-    if (services?.data.renters?.length) {
-      let listServicePack = [...renterList];
-      const additionalServices = services.data.renters
-        .filter((service) =>
-          listServicePack.every(
-            (checkedService) => checkedService.id !== service.id,
-          ),
-        )
-        .map(({ id, price }) => ({ id, price, quantity: 1 }));
+    if (servicePackItem?.data.setting.renters.length) {
+      const initData: IRenter[] = servicePackItem?.data.setting.renters.map(
+        (initItem) => ({
+          renter: initItem.id,
+          price: initItem.price,
+          quantity: initItem.quantity,
+        }),
+      );
 
-      const listData = [...listServicePack, ...additionalServices];
-
-      setListItem(listData);
-      // set so tien mac dinh theo goi
-      // const totalMoney = renterList.reduce((total, service) => {
-      //   return total + service.quantity * service.price;
-      // }, 0);
-
-      // setTotalAmount(totalMoney);
+      setInitBookingCart(initData || []);
     }
-  }, [renterList]);
+  }, [servicePackItem?.data.setting.renters.length]);
 
-  // tăng giảm số lượng thiết bị
-  const setQuantityForItem = (id: string, quantity: number) => {
-    const updatedList = listItem.map((item) => {
-      if (item.id === id) {
-        return {
-          ...item,
-          quantity: quantity,
-        };
-      }
-      return item;
-    });
-    setListItem(updatedList);
-  };
-
-  const handleCheckboxChange = (id: string) => {
-    const isSelected = selectedItems.includes(id);
-    setSelectedItems((prevSelectedItems) =>
-      isSelected
-        ? prevSelectedItems.filter((item) => item !== id)
-        : [...prevSelectedItems, id],
-    );
-  };
-  console.log(selectedItems);
-
-  const handleSubmit = () => {
-    console.log('selectedItems', selectedItems);
-
-    setError('');
-    if (selectedItems.length < 1) {
-      setError('Vui lòng chọn thiết bị!');
-    }
-
-    const objectSubmit = listItem.filter((item) =>
-      selectedItems.includes(item.id),
-    );
-
-    const totalMoney = objectSubmit.reduce((total, service) => {
-      return total + service.quantity * service.price;
-    }, 0);
-
-    setTotalAmount(totalMoney);
-    console.log('totalMoney', totalMoney);
-
-    console.log('selectedItems', totalAmount);
-
-    handleConfirm({
-      renters: objectSubmit,
-      totalAmount: totalAmount,
-    } as unknown as IRenterItemPay);
-  };
+  console.log('bookingCart', bookingCart);
 
   return (
-    <>
-      {services && services.data.renters.length > 0 && (
-        <Table
-          aria-label="Controlled table example with dynamic content"
-          // selectionMode="multiple"
-          // selectedKeys={selectedKeys}
-          // onSelectionChange={setSelectedKeys}
-        >
-          <TableHeader>
-            <TableColumn>No.</TableColumn>
-            <TableColumn>Tên thiết bị</TableColumn>
-            <TableColumn>Đơn vị tính</TableColumn>
-            <TableColumn>
-              Giá tiền<span className="ms-1">(VNĐ)</span>
-            </TableColumn>
-            <TableColumn>Số lượng</TableColumn>
-            <TableColumn>Ghi chú</TableColumn>
-          </TableHeader>
-          <TableBody>
-            {services.data.renters.map((serviceItem, index) => (
-              <TableRow key={serviceItem.id}>
+    <Table aria-label="Controlled table example with dynamic content">
+      <TableHeader>
+        <TableColumn>No.</TableColumn>
+        <TableColumn>Tên thiết bị</TableColumn>
+        <TableColumn>
+          Đơn giá<span className="ms-1">(VNĐ)</span>
+        </TableColumn>
+        <TableColumn className="w-[160px]">Số lượng</TableColumn>
+        <TableColumn>Số lượng còn</TableColumn>
+        <TableColumn>Đơn vị tính</TableColumn>
+        <TableColumn>Ghi chú</TableColumn>
+      </TableHeader>
+      <TableBody
+        isLoading={isLoadingAllService}
+        loadingContent={<Spinner label="Loading..." />}
+        emptyContent={'No rows to display.'}
+      >
+        {!!allServices?.data.renters.length
+          ? allServices.data.renters.map((serviceItem) => (
+              <TableRow key={serviceItem._id}>
                 <TableCell>
                   <Checkbox
-                    id={serviceItem.id}
-                    defaultChecked={selectedItems.includes(
-                      String(serviceItem.id),
-                    )}
-                    onChange={() => handleCheckboxChange(serviceItem.id)}
-                  />
+                    isSelected={
+                      !!bookingCart.find(
+                        (cartItem) => cartItem.renter === serviceItem._id,
+                      )
+                    }
+                    onValueChange={(isSelected: boolean) => {
+                      if (isSelected) {
+                        setBookingCart({
+                          renter: serviceItem._id,
+                          price: serviceItem.price,
+                          quantity: 1,
+                        });
+                      } else {
+                        setBookingCart(
+                          {
+                            renter: serviceItem._id,
+                            price: serviceItem.price,
+                            quantity: 1,
+                          },
+                          true,
+                        );
+                      }
+                    }}
+                  >
+                    Option
+                  </Checkbox>
                 </TableCell>
                 <TableCell>{serviceItem.name}</TableCell>
-                <TableCell>{serviceItem.unit}</TableCell>
-                <TableCell>{serviceItem.price}</TableCell>
                 <TableCell>
-                  <div className="flex gap-1 items-center">
+                  <NumberFormat value={serviceItem.price} />
+                </TableCell>
+                <TableCell>
+                  <div className="flex gap-1 items-center justify-between">
                     <Button
-                      disabled={listItem[index]?.quantity === 1}
+                      disabled={
+                        bookingCart.find(
+                          (cartItem) => cartItem.renter === serviceItem._id,
+                        )?.renter !== serviceItem._id ||
+                        bookingCart.find(
+                          (cartItem) => cartItem.renter === serviceItem._id,
+                        )?.quantity === 0
+                      }
                       size="sm"
                       isIconOnly
-                      onClick={() =>
-                        setQuantityForItem(
-                          serviceItem.id,
-                          listItem[index].quantity - 1,
-                        )
-                      }
+                      onClick={() => {
+                        const bookedItem = bookingCart.find(
+                          (cartItem) => cartItem.renter === serviceItem._id,
+                        );
+
+                        setBookingCart({
+                          renter: serviceItem._id,
+                          price: serviceItem.price,
+                          quantity: bookedItem?.quantity
+                            ? bookedItem.quantity - 1
+                            : 0,
+                        });
+                      }}
                     >
                       <AiOutlineMinus />
                     </Button>
-                    <span>{listItem[index]?.quantity}</span>
+                    <span className="flex-1 text-end">
+                      {bookingCart.find(
+                        (cartItem) => cartItem.renter === serviceItem._id,
+                      )?.quantity || 0}
+                    </span>
                     <Button
                       disabled={
-                        listItem[index]?.quantity === serviceItem.quantity
+                        bookingCart.find(
+                          (cartItem) => cartItem.renter === serviceItem._id,
+                        )?.renter !== serviceItem._id ||
+                        bookingCart.find(
+                          (cartItem) => cartItem.renter === serviceItem._id,
+                        )?.quantity === serviceItem.quantity
                       }
+                      onClick={() => {
+                        const bookedItem = bookingCart.find(
+                          (cartItem) => cartItem.renter === serviceItem._id,
+                        );
+
+                        setBookingCart({
+                          renter: serviceItem._id,
+                          price: serviceItem.price,
+                          quantity: (bookedItem?.quantity || 0) + 1,
+                        });
+                      }}
                       size="sm"
                       isIconOnly
-                      onClick={() =>
-                        setQuantityForItem(
-                          serviceItem.id,
-                          listItem[index].quantity + 1,
-                        )
-                      }
                     >
                       <AiOutlinePlus />
                     </Button>
                   </div>
                 </TableCell>
+                <TableCell>{serviceItem.quantity}</TableCell>
+                <TableCell>{serviceItem.unit}</TableCell>
                 <TableCell>{serviceItem.note}</TableCell>
               </TableRow>
-            ))}
-          </TableBody>
-        </Table>
-      )}
-      {error && <p className="text-danger text-xs">{error}</p>}
-      <Button className="mt-5" onClick={() => handleSubmit()}>
-        Xác nhận
-      </Button>
-
-      <p>
-        <b>Tổng cộng: </b>
-        <span>{totalAmount} vnd</span>
-      </p>
-    </>
+            ))
+          : []}
+      </TableBody>
+    </Table>
   );
 }
 

@@ -1,42 +1,53 @@
 import { FormProvider } from 'react-hook-form';
 import * as Yup from 'yup';
-import useFormWithYup from '../../../hooks/useFormWithYup';
-import TableBooking from '../components/TableBooking';
-import CInput from '../../../components/CInput';
-import CDatePicker from '../../../components/CDatePicker/CDatepicker';
 import { Button } from '@nextui-org/react';
 import { format } from 'date-fns';
+import { useEffect, useMemo } from 'react';
+import { useNavigate, useSearchParams } from 'react-router-dom';
+import { ActionMeta } from 'react-select';
+
+import useFormWithYup from '../../../hooks/useFormWithYup';
+import CInput from '../../../components/CInput';
+import CDatePicker from '../../../components/CDatePicker/CDatepicker';
 import {
   useAllCategoriesService,
   useAllServicePack,
 } from '../../Admin/apis/settingService.api';
-import { useMemo, useState } from 'react';
-import CSelect from '../../../components/CSelect';
-import { useGetSettingOptionService } from '../apis/booking.api';
-import { IRenterItemPay } from '../../../types/common';
+import { ISelectOption } from '../../../types/common';
+import CReactSelect from '../../../components/CReactSelect';
+import TableBooking from '../components/TableBooking';
+import { useTotalBill } from '../store/booking.store';
+import NumberFormat from '../../../components/NumberFormat';
 
 const bookingSchema = Yup.object().shape({
   name: Yup.string().required('Vui lòng nhập tên!'),
   email: Yup.string().required('Vui lòng nhập địa chỉ!'),
   phone: Yup.string().required('Vui lòng nhập số điện thoại!'),
-  numberOfAttendes: Yup.number().required('Vui lòng nhập số lượng khách!'),
+  numberOfAttendes: Yup.number()
+    .typeError('Số lượng khách phải là số!')
+    .required('Vui lòng nhập số lượng khách!')
+    .nullable(),
 });
 
 function Booking() {
-  const [datarenters, setDataRenters] = useState<IRenterItemPay>();
+  const navigate = useNavigate();
+  const [searchParams, setSearchParams] = useSearchParams();
 
   const methods = useFormWithYup(bookingSchema, {
     defaultValues: {
-      name: '',
-      email: '',
-      phone: '',
-      address: '',
-      numberOfAttendes: '',
+      name: 'khach hang',
+      email: 'khachhang@gmail.com',
+      phone: '123',
+      address: '12 hihi',
+      numberOfAttendes: 200,
       eventTime: null,
+      service: null,
+      servicePack: null,
     },
   });
   const { data: categoriesService } = useAllCategoriesService();
   const { data: listServicePack } = useAllServicePack();
+  const totalBill = useTotalBill();
 
   const serviceOptions = useMemo(() => {
     if (categoriesService?.data.services.length) {
@@ -50,13 +61,20 @@ function Booking() {
     return [];
   }, [categoriesService?.data]);
 
-  const { handleSubmit, watch } = methods;
+  const { handleSubmit, watch, setValue, trigger } = methods;
   const watchService = watch('service');
+
+  const handleOnChange = (name: string) => (newValue: ISelectOption) => {
+    setValue(name, newValue);
+    trigger(name);
+    searchParams.set(name, String(newValue.value));
+    setSearchParams(searchParams);
+  };
 
   const servicePackOptions = useMemo(() => {
     if (listServicePack?.data.services.length) {
       const targetService = listServicePack.data.services.find(
-        (service) => service.id === watchService,
+        (service) => service.id === watchService?.value,
       );
       return targetService?.settings.map((setting) => ({
         label: setting.name,
@@ -66,33 +84,36 @@ function Booking() {
     return [];
   }, [categoriesService?.data, watchService]);
 
-  const watchServicePack = watch('servicePack');
-  const { data: servicePackItem } = useGetSettingOptionService(
-    watchService,
-    watchServicePack,
-  );
-
-  const actionConfirm = (item: IRenterItemPay | undefined) => {
-    setDataRenters(item);
-  };
-
   // const { mutate: addBooking } = useAddBooking();
   const submitHandler = handleSubmit((values) => {
-    const newScheduledTime = values.eventTime
-      ? format(values.eventTime as unknown as Date, 'yyyy/MM/dd hh:mm')
-      : '';
-
-    const submitValue = {
-      ...values,
-      eventTime: newScheduledTime,
-      renters: datarenters?.renters.map((renter) => ({
-        renter: renter.id,
-        quantity: renter.quantity,
-      })),
-      totalAmount: datarenters?.totalAmount,
-    };
-    console.log('submitValue', submitValue);
+    navigate('/thanh-toan', {
+      state: {
+        submitValue: values,
+      },
+    });
   });
+
+  useEffect(() => {
+    if (searchParams.get('service') && serviceOptions.length) {
+      setValue(
+        'service',
+        serviceOptions.find(
+          (serviceOption) =>
+            serviceOption.value === searchParams.get('service') || null,
+        ),
+      );
+    }
+
+    if (searchParams.get('service') && servicePackOptions?.length) {
+      setValue(
+        'servicePack',
+        servicePackOptions.find(
+          (serviceOption) =>
+            serviceOption.value === searchParams.get('servicePack') || null,
+        ),
+      );
+    }
+  }, [serviceOptions.length, servicePackOptions?.length]);
 
   return (
     <div>
@@ -115,35 +136,52 @@ function Booking() {
               name="numberOfAttendes"
               id="numberOfAttendes"
             />
+
             <CInput label="Địa chỉ" name="address" id="address" />
+
             <CDatePicker
               name="eventTime"
               placeholderText="Nhập thời gian tổ chức"
             />
 
-            <CSelect
+            <CReactSelect
               id="service"
               name="service"
               placeholder="Chọn dịch vụ"
-              label="Dịch vụ"
+              // label="Dịch vụ"
               options={serviceOptions}
+              // onChange={handleOnChange('service')}
+              onChange={
+                handleOnChange('service') as unknown as (
+                  newValue: unknown,
+                  actionMeta: ActionMeta<unknown>,
+                ) => void
+              }
             />
 
-            <CSelect
+            <CReactSelect
               id="servicePack"
               name="servicePack"
               placeholder="Gói dịch vụ"
-              label="Dịch vụ"
+              // label="Dịch vụ"
+              onChange={
+                handleOnChange('servicePack') as unknown as (
+                  newValue: unknown,
+                  actionMeta: ActionMeta<unknown>,
+                ) => void
+              }
               options={servicePackOptions ?? []}
             />
           </div>
-          <TableBooking
-            handleConfirm={actionConfirm}
-            renterList={servicePackItem?.data?.setting?.renters ?? []}
-          />
-          <Button className="mt-5" type="submit">
-            Đặt đơn hàng
-          </Button>
+
+          <TableBooking />
+          <div className="text-end mt-3">
+            Tổng hóa đơn:
+            <NumberFormat className="fw-bold text-3xl" value={totalBill} />
+            <Button color="primary" className="mt-5" type="submit">
+              Đặt đơn hàng
+            </Button>
+          </div>
         </form>
       </FormProvider>
     </div>

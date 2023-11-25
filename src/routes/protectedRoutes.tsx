@@ -12,6 +12,9 @@ const ServicePack = lazy(() => import('../features/Admin/pages/ServicePack'));
 const SettingServiceOptions = lazy(
   () => import('../features/Admin/pages/SettingServiceOptions'),
 );
+const ServiceStatistics = lazy(
+  () => import('../features/Statistics/pages/ServiceStatistics'),
+);
 
 const protectedRoutes: IRoute[] = [
   {
@@ -60,6 +63,18 @@ const protectedRoutes: IRoute[] = [
     page: <Booking />,
     path: 'booking',
     role: ['user'],
+  },
+  {
+    page: <ServiceStatistics />,
+    path: 'service-statistics',
+    layout: SidebarLayout,
+    role: ['user'],
+  },
+  {
+    page: <ServiceStatistics />,
+    path: 'service-statistics',
+    layout: SidebarLayout,
+    role: ['admin'],
   },
 ];
 

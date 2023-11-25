@@ -20,6 +20,7 @@ function Sidebar({ options }: SidebarProps) {
         .map((option) => (
           <ListboxItem key={option.path}>
             <NavLink
+              className="block px-4 py-2 rounded-md transition duration-300 ease-in-out hover:bg-gray-500 active:bg-gray-500 focus:outline-none focus:ring active:border-blue-300"
               style={({ isActive }) => ({
                 fontWeight: isActive ? '600' : '',
               })}

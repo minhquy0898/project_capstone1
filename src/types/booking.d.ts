@@ -1,12 +1,10 @@
 import { NumberFieldAria } from 'react-aria';
+import IServiceItem from './service';
+import { IUser } from './user';
 
 interface IBooking {
-  renters: [
-    {
-      renter: string;
-      quantity: number;
-    },
-  ];
+  renters: IServiceItem[];
+  id?: string;
   event: string;
   address: string;
   phone: string;
@@ -18,4 +16,5 @@ interface IBooking {
   totalAmount: Number;
   method: string;
   paypalId: string;
+  user: IUser;
 }

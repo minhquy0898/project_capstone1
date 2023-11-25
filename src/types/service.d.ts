@@ -1,3 +1,5 @@
+import { IRenter } from './booking';
+
 export interface IService {
   title: string;
   id: string;
@@ -18,9 +20,13 @@ export interface IServiceItem {
   };
 }
 
+interface IServicePackInfomationRenter extends Omit<IRenter, 'renter'> {
+  id: string;
+}
+
 export interface IServicePackInfomation {
   name: string;
-  renters: IServiceItem[];
+  renters: IServicePackInfomationRenter[];
 }
 
 export interface IServiceInfomation {

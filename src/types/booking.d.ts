@@ -1,3 +1,11 @@
+import { NumberFieldAria } from 'react-aria';
+import IServiceItem from './service';
+import { IUser } from './user';
+
+interface IBooking {
+  renters: IServiceItem[];
+  id?: string;
+}
 export interface IRenter {
   renter: string;
   quantity: number;
@@ -28,4 +36,5 @@ export interface IBooking extends ICheckoutBody {
   totalAmount: Number;
   method: string;
   paypalId: string;
+  user: IUser;
 }

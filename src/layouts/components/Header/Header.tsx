@@ -11,6 +11,7 @@ import {
 } from '@nextui-org/react';
 import { MdOutlineCalendarToday } from 'react-icons/md';
 import { Link } from 'react-router-dom';
+import { useMemo } from 'react';
 
 import NavItem from './NavItem';
 import { useFetchUser, useLogout } from '../../../apis/auth.api';
@@ -38,49 +39,28 @@ function Header() {
   const { data: userData, isLoading: isLoadingUser } = useFetchUser();
   const logoutMutate = useLogout();
 
+  const UserOptions = useMemo(() => {
+    if (
+      userData?.data?.account?.role &&
+      userData?.data?.account?.role === 'admin'
+    ) {
+      return {
+        title: 'Quản lý',
+        url: '/setting-service-option',
+      };
+    }
+    return {
+      title: 'Thông tin cá nhân',
+      url: '/profile',
+    };
+  }, [userData?.data?.account?.role]);
+
   return (
     <Navbar isBordered maxWidth="full" className="fixed">
       <NavbarBrand>
         <p className="font-bold text-inherit">LOGO</p>
       </NavbarBrand>
       <NavbarContent className="hidden sm:flex gap-4" justify="center">
-        {/* <Dropdown className="backdrop-blur-lg backdrop-saturate-150 bg-background/70">
-          <NavbarItem>
-            <DropdownTrigger>
-              <Button
-                disableRipple
-                className="p-0 bg-transparent data-[hover=true]:bg-transparent"
-                endContent={<BsChevronDown />}
-                radius="sm"
-                variant="light"
-              >
-                Features
-              </Button>
-            </DropdownTrigger>
-          </NavbarItem>
-          <DropdownMenu
-            aria-label="ACME features"
-            className="w-[340px]"
-            itemClasses={{
-              base: 'gap-4',
-            }}
-          >
-            <DropdownItem key="autoscaling">Tổ Chức Sự Kiện</DropdownItem>
-            <DropdownItem key="usage_metrics">
-              Tổ Chức Khai Trương Trọn Gói
-            </DropdownItem>
-            <DropdownItem key="production_ready">
-              Tổ Chức Lễ Khởi Công, Động Thổ
-            </DropdownItem>
-            <DropdownItem key="99_uptime">Tổ Chức Gala Dinner</DropdownItem>
-            <DropdownItem>Tổ Chức Tiệc - Gala Dinner</DropdownItem>
-            <DropdownItem>Lễ Hội Văn Hóa</DropdownItem>
-            <DropdownItem>Hội Nghị - Hội Thảo</DropdownItem>
-            <DropdownItem>Cho Thuê Thiết Bị Ánh Sáng</DropdownItem>
-            <DropdownItem>Dịch Vụ Cung Cấp MC</DropdownItem>
-            <DropdownItem>Dịch Vụ Cung Cấp Nhóm Nhảy</DropdownItem>
-          </DropdownMenu>
-        </Dropdown> */}
         {navOptions.map((navItem) => (
           <NavItem to={navItem.url} key={navItem.url}>
             {navItem.title}
@@ -118,7 +98,7 @@ function Header() {
                       </p>
                     </DropdownItem>
                     <DropdownItem key="settings">
-                      <Link to="/profile">Thông tin cá nhân</Link>
+                      <Link to={UserOptions.url}>{UserOptions.title}</Link>
                     </DropdownItem>
                     <DropdownItem
                       onPress={() => logoutMutate.mutate()}

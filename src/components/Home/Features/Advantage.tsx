@@ -92,6 +92,7 @@ function Advantage() {
           >
             {advantageList.map((adv) => (
               <div
+                key={adv.title}
                 className="relative flex flex-col items-center"
                 data-aos="fade-up"
                 data-aos-anchor="[data-aos-id-blocks]"

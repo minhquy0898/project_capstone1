@@ -12,7 +12,7 @@ function ServicesHome() {
           <Spinner />
         </div>
       )}
-      {!isLoading && data?.data.events.length && (
+      {!isLoading && data?.data.events?.length && (
         <div className="my-6">
           <h3 className="font-bold mb-4 text-3xl">DỊCH VỤ SỰ KIỆN</h3>
 

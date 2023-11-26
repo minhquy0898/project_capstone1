@@ -12,8 +12,6 @@ function ServiceStatistics() {
     dataUser?.data.account.role,
   );
 
-  console.log('dataStatistic', dataStatistic?.data.orders[0].user);
-
   return (
     <>
       <div>
@@ -41,7 +39,11 @@ function ServiceStatistics() {
                 />
                 <ShowDataRow
                   title="Tổng số tiền"
-                  data={order?.numberOfAttendes}
+                  data={order?.renters.reduce((preValue, currValue) => {
+                    return (
+                      preValue + currValue.quantity * currValue.renter.price
+                    );
+                  }, 0)}
                 />
                 <ShowDataRow title="Mã thanh toán" data={order?.paypalId} />
 

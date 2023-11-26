@@ -1,8 +1,7 @@
 import { Badge, Image } from '@nextui-org/react';
-import 'swiper/css';
-import Advantage from '../components/Home/Features/advantage';
 import Value from '../components/Home/Features/Value';
 import ServiceHome from '../components/Home/Features/ServiceHome';
+import Advantage from '../components/Home/Features/Advantage';
 
 function Home() {
   return (

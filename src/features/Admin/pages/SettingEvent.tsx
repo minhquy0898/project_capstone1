@@ -8,9 +8,12 @@ import {
 } from '@nextui-org/react';
 import { MdOutlineClear } from 'react-icons/md';
 import { useAllEvent } from '../../../apis/event.api';
+import { Link } from 'react-router-dom';
+import { useDeleteEvent } from '../apis/event.api';
 
 function SettingEvent() {
   const { data: eventData, isLoading } = useAllEvent();
+  const { mutate: deleteEventMutate } = useDeleteEvent();
 
   return (
     <div>
@@ -25,14 +28,19 @@ function SettingEvent() {
 
           <div className="gap-2 grid grid-cols-2 sm:grid-cols-5">
             {eventData?.data.events.map((cardItem) => (
-              <div className="relative">
+              <div key={cardItem.id} className="relative">
                 <Button
                   className="absolute right-0 bg-rose-500 text-white z-20"
                   isIconOnly
+                  onClick={() => {
+                    deleteEventMutate(cardItem.id as string);
+                  }}
                 >
                   <MdOutlineClear size={18} />
                 </Button>
                 <Card
+                  // as={Link}
+                  // to={"/dich-vu"}
                   className="w-full"
                   key={cardItem.id}
                   shadow="sm"

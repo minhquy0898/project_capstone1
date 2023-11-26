@@ -12,7 +12,9 @@ interface ILoginBody {
 }
 
 const loginApi = async (body: ILoginBody) => {
-  const res = await http.post<IGenericResponse<IUser>>('auth/sign-in', body);
+  const res = await http.post<
+    IGenericResponse<{ accessToken: string; account: IUser }>
+  >('auth/sign-in', body);
   return res.data;
 };
 

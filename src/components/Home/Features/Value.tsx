@@ -24,7 +24,7 @@ function Value() {
                   <CardBody>
                     <ul className="text-lg text-gray-400 -mb-2">
                       {valueList.map((value) => (
-                        <li className="flex items-baseline mb-2">
+                        <li key={value} className="flex items-baseline mb-2">
                           <svg
                             className="w-3 h-3 fill-current text-green-500 mr-2 shrink-0"
                             viewBox="0 0 12 12"

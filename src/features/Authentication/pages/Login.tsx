@@ -36,8 +36,15 @@ function Login() {
     loginMutate.mutate(values, {
       onSuccess(data) {
         if (data.isSuccess) {
+          console.log('data-login', data);
+
           toast.success('Đăng nhập thành công!');
-          navigate('/', { replace: true });
+          navigate(
+            data.data.account.role === 'admin'
+              ? '/setting-service-option'
+              : '/',
+            { replace: true },
+          );
         } else {
           toast.error('Đăng nhập thất bại!');
         }

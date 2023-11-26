@@ -1,5 +1,3 @@
-import 'swiper/css';
-
 type AdvantageList = {
   icon: JSX.Element;
   title: string;

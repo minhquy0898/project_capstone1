@@ -25,12 +25,7 @@ function CarouselHome() {
             src="https://promice.vn/storage/uploads/20210528-unnamed-1.jpg"
           />
         </div>
-        <div className="h-[600px]">
-          <img
-            className="h-full"
-            src="https://palamunevent.com/wp-content/uploads/2021/09/bi-quyet-quan-ly-thoi-gian-cua-dan-to-chuc-su-kien-2-1.jpg"
-          />
-        </div>
+
         <div className="h-[600px]">
           <img
             className="h-full"

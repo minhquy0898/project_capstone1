@@ -25,8 +25,6 @@ function SettingEvent() {
       )}
       {!isLoading && eventData?.data.events.length && (
         <div className="my-6">
-          <TitleBorderStart>Các sự kiện</TitleBorderStart>
-
           <div className="gap-2 grid grid-cols-2 sm:grid-cols-5">
             {eventData?.data.events.map((cardItem) => (
               <div key={cardItem.id} className="relative">

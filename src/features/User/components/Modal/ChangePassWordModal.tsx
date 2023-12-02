@@ -15,12 +15,13 @@ import { toast } from 'react-toastify';
 import useFormWithYup from '../../../../hooks/useFormWithYup';
 import CInput from '../../../../components/CInput';
 import { useChangePass } from '../../../Admin/apis/user.api';
-import { useFetchUser } from '../../../../apis/auth.api';
 import ErrorMessage from '../../../../components/ErrorMessage';
 
 const changePassSchema = Yup.object().shape({
   oldPassword: Yup.string().required('Vui lòng nhập trường này'),
-  newPassword: Yup.string().required('Vui lòng nhập trường này'),
+  newPassword: Yup.string()
+    .required('Vui lòng nhập trường này')
+    .min(6, 'Mật khẩu phải có ít nhất 6 ký tự!'),
   confirmPassword: Yup.string()
     .required('Vui lòng nhập mật khẩu!')
     .oneOf([Yup.ref('newPassword')], 'Mật khẩu không khớp!'),
@@ -34,7 +35,6 @@ const initValues = {
 
 function ModalChangePassword() {
   const [errorMessage, setErrorMessage] = useState<string>('');
-  const { data: dataUser } = useFetchUser();
   const { isOpen, onOpen, onOpenChange } = useDisclosure();
 
   const methods = useFormWithYup(changePassSchema, {
@@ -48,7 +48,6 @@ function ModalChangePassword() {
   const submitHandler = handleSubmit((values) => {
     changeProfile(
       {
-        userId: String(dataUser?.data.account.id),
         payload: {
           oldPassword: values.oldPassword,
           newPassword: values.newPassword,

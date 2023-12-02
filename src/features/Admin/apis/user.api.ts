@@ -46,14 +46,8 @@ interface IChangePasBody {
   newPassword: string;
 }
 
-export const changePass = async ({
-  userId,
-  payload,
-}: {
-  userId: string;
-  payload: IChangePasBody;
-}) => {
-  const res = await http.patch(`/auth/change-password/${userId}`, payload);
+export const changePass = async ({ payload }: { payload: IChangePasBody }) => {
+  const res = await http.post('auth/change-password', payload);
 
   return res.data;
 };

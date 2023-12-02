@@ -20,7 +20,7 @@ import TitleBorderStart from '../../../components/TitleBorderStart/TitleBorderSt
 
 function ServicePack() {
   const { data: dataServicePack } = useAllServicePack();
-  console.log(dataServicePack);
+  console.log('dataServicePack', dataServicePack);
 
   const { isOpen, onOpen, onOpenChange } = useDisclosure();
 

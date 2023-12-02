@@ -10,6 +10,7 @@ import { MdOutlineClear } from 'react-icons/md';
 import { useAllEvent } from '../../../apis/event.api';
 import { Link } from 'react-router-dom';
 import { useDeleteEvent } from '../apis/event.api';
+import TitleBorderStart from '../../../components/TitleBorderStart/TitleBorderStart';
 
 function SettingEvent() {
   const { data: eventData, isLoading } = useAllEvent();
@@ -24,8 +25,6 @@ function SettingEvent() {
       )}
       {!isLoading && eventData?.data.events.length && (
         <div className="my-6">
-          <h3 className="font-bold mb-4 text-3xl">Các sự kiện</h3>
-
           <div className="gap-2 grid grid-cols-2 sm:grid-cols-5">
             {eventData?.data.events.map((cardItem) => (
               <div key={cardItem.id} className="relative">

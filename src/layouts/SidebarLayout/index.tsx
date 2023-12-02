@@ -14,6 +14,7 @@ const sidebarItems: ISidebarOption[] = [
     path: '/setting-service-option',
     role: ['admin'],
   },
+
   {
     name: 'Đăng bài',
     path: '/post',
@@ -43,6 +44,11 @@ const sidebarItems: ISidebarOption[] = [
     name: 'Thống kê dịch vụ',
     path: '/service-statistics',
     role: ['admin'],
+  },
+  {
+    name: 'Thông tin cá nhân',
+    path: '/profile',
+    role: ['admin', 'user'],
   },
 ];
 

@@ -1,6 +1,7 @@
 import { Carousel } from 'react-responsive-carousel';
 import 'react-responsive-carousel/lib/styles/carousel.min.css'; // requires a loader
 import './Carouse.css';
+import APP_IMAGES from '../../../assets/images';
 <link rel="stylesheet" href="carousel.css" />;
 
 function CarouselHome() {
@@ -13,6 +14,10 @@ function CarouselHome() {
             src="https://vov2.vov.vn/sites/default/files/styles/large/public/2021-12/san-khau-dam-cuoi-12.jpg"
           />
         </div>
+        <div className="h-[600px] ">
+          <img className="h-full" src={APP_IMAGES.bgEvent} />
+        </div>
+
         <div className="h-[600px]">
           <img
             className="h-full"
@@ -25,12 +30,7 @@ function CarouselHome() {
             src="https://promice.vn/storage/uploads/20210528-unnamed-1.jpg"
           />
         </div>
-        <div className="h-[600px]">
-          <img
-            className="h-full"
-            src="https://palamunevent.com/wp-content/uploads/2021/09/bi-quyet-quan-ly-thoi-gian-cua-dan-to-chuc-su-kien-2-1.jpg"
-          />
-        </div>
+
         <div className="h-[600px]">
           <img
             className="h-full"

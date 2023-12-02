@@ -11,6 +11,7 @@ import CSelect from '../../../components/CSelect';
 import { useAllCategoriesService } from '../apis/settingService.api';
 import { useAddEvent } from '../apis/event.api';
 import { toast } from 'react-toastify';
+import TitleBorderStart from '../../../components/TitleBorderStart/TitleBorderStart';
 
 const postSchema = Yup.object().shape({
   title: Yup.string().required('Vui lòng nhập trường này!'),
@@ -68,7 +69,7 @@ function Post() {
 
   return (
     <div>
-      <h1 className="font-bold text-4xl mb-4">Đăng bài dịch vụ</h1>
+      <TitleBorderStart>Đăng bài dịch vụ</TitleBorderStart>
 
       <FormProvider {...methods}>
         <form onSubmit={submitHandler}>

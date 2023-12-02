@@ -133,7 +133,7 @@ function ModalAddServicePark({
     if (services?.data.renters?.length) {
       setListItem(
         services.data.renters.map((service) => ({
-          id: service.id,
+          id: service._id,
           price: Number(service.price),
           quantity: service.quantity,
         })),
@@ -187,15 +187,15 @@ function ModalAddServicePark({
                         </TableHeader>
                         <TableBody>
                           {services.data.renters.map((serviceItem, index) => (
-                            <TableRow key={serviceItem.id}>
+                            <TableRow key={serviceItem._id}>
                               <TableCell>
                                 <Checkbox
-                                  id={serviceItem.id}
+                                  id={serviceItem._id}
                                   defaultChecked={selectedItems.includes(
-                                    serviceItem.id,
+                                    serviceItem._id,
                                   )}
                                   onChange={() =>
-                                    handleCheckboxChange(serviceItem.id)
+                                    handleCheckboxChange(serviceItem._id)
                                   }
                                 />
                               </TableCell>
@@ -210,7 +210,7 @@ function ModalAddServicePark({
                                     isIconOnly
                                     onClick={() =>
                                       setQuantityForItem(
-                                        serviceItem.id,
+                                        serviceItem._id,
                                         listItem[index].quantity - 1,
                                       )
                                     }
@@ -229,7 +229,7 @@ function ModalAddServicePark({
                                     isIconOnly
                                     onClick={() =>
                                       setQuantityForItem(
-                                        serviceItem.id,
+                                        serviceItem._id,
                                         listItem[index].quantity + 1,
                                       )
                                     }

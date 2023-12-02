@@ -16,6 +16,8 @@ const EventServiceDetail = lazy(
   () => import('../features/Booking/pages/EventServiceDetail'),
 );
 
+const Introduce = lazy(() => import('../pages/Introduce'));
+
 const publicRoutes: IRoute[] = [
   {
     page: <Home />,
@@ -40,6 +42,10 @@ const publicRoutes: IRoute[] = [
   {
     page: <EventServices />,
     path: 'dich-vu',
+  },
+  {
+    page: <Introduce />,
+    path: 'gioi-thieu',
   },
   {
     page: <EventServiceDetail />,

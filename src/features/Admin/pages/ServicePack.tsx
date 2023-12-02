@@ -16,6 +16,7 @@ import { MdOutlineAdd } from 'react-icons/md';
 
 import ModalAddServicePark from '../components/Modal/ModalAddServicePark';
 import { useAllServicePack } from '../apis/settingService.api';
+import TitleBorderStart from '../../../components/TitleBorderStart/TitleBorderStart';
 
 function ServicePack() {
   const { data: dataServicePack } = useAllServicePack();
@@ -25,7 +26,8 @@ function ServicePack() {
 
   return (
     <div>
-      <h1 className="font-bold text-4xl mb-4">Quản lý gói dịch vụ</h1>
+      <TitleBorderStart>Quản lý gói dịch vụ</TitleBorderStart>
+
       <Button
         onPress={onOpen}
         color="primary"

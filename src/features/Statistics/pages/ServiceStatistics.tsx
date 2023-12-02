@@ -3,6 +3,7 @@ import ShowDataRow from '../components/ShowDataRow';
 import { useFetchUser } from '../../../apis/auth.api';
 import { useGetServiceStatistic } from '../apis/statistic.api';
 import TableService from '../components/Table/TableService';
+import TitleBorderStart from '../../../components/TitleBorderStart/TitleBorderStart';
 
 function ServiceStatistics() {
   const { data: dataUser } = useFetchUser();
@@ -15,15 +16,13 @@ function ServiceStatistics() {
   return (
     <>
       <div>
-        <h1 className="font-bold text-4xl mb-4 text-blue-500">
-          Thống kê dịch vụ
-        </h1>
+        <TitleBorderStart>Thống kê dịch vụ</TitleBorderStart>
         {dataStatistic &&
           dataStatistic.data.orders?.length > 0 &&
           dataStatistic?.data.orders.map((order) => (
             <Card className="mt-3" id={order?.id}>
               <CardHeader className="flex gap-3 font-semibold text-xl">
-                Thông tin dịch vụ
+                Thông tin dịch vụ: {order?.servicePack}
               </CardHeader>
               <Divider />
               <CardBody>

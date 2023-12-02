@@ -25,6 +25,7 @@ import {
   useAllCategoriesService,
   useDeleteCategory,
 } from '../apis/settingService.api';
+import TitleBorderStart from '../../../components/TitleBorderStart/TitleBorderStart';
 
 const serviceSchema = Yup.object().shape({
   title: Yup.string().required('Vui lòng nhập tên dịch vụ!'),
@@ -61,7 +62,7 @@ function Service() {
 
   return (
     <>
-      <h1 className="font-bold text-4xl mb-4">Quản lý dịch vụ</h1>
+      <TitleBorderStart>Quản lý dịch vụ</TitleBorderStart>
 
       <Modal
         isOpen={isOpen}

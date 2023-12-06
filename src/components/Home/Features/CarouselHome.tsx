@@ -10,36 +10,34 @@ function CarouselHome() {
       <Carousel showThumbs={false} autoPlay={true}>
         <div className="h-[600px] ">
           <img
-            className="h-full"
+            className="h-full object-cover"
             src="https://vov2.vov.vn/sites/default/files/styles/large/public/2021-12/san-khau-dam-cuoi-12.jpg"
           />
         </div>
         <div className="h-[600px] ">
-          <img className="h-full" src={APP_IMAGES.bgEvent} />
+          <img className="h-full object-cover" src={APP_IMAGES.bgEvent} />
         </div>
-
         <div className="h-[600px]">
           <img
-            className="h-full"
+            className="h-full object-cover"
             src="https://sukienachau.com/wp-content/uploads/2022/03/to-chuc-dam-cuoi-dai-gia-1.jpg"
           />
         </div>
         <div className="h-[600px]">
           <img
-            className="h-full"
+            className="h-full object-cover"
             src="https://promice.vn/storage/uploads/20210528-unnamed-1.jpg"
           />
         </div>
-
         <div className="h-[600px]">
           <img
-            className="h-full"
+            className="h-full object-cover"
             src="https://palamunevent.com/wp-content/uploads/2021/09/bi-quyet-quan-ly-thoi-gian-cua-dan-to-chuc-su-kien-3-1.jpg"
           />
         </div>
         <div className="h-[600px]">
           <img
-            className="h-full"
+            className="h-full object-cover"
             src="https://promice.vn/storage/uploads/20210528-unnamed-1.jpg"
           />
         </div>

@@ -5,6 +5,7 @@ import { IUser } from './user';
 interface IBooking {
   renters: IServiceItem[];
   id?: string;
+  _id?: string;
 }
 export interface IRenter {
   renter: string;
@@ -23,6 +24,19 @@ export interface ICheckoutBody {
   eventTime: string;
 }
 
+type BookingStatusType =
+  | 'not-started'
+  | 'pending'
+  | 'inprogressing'
+  | 'finished'
+  | 'cancel';
+
+export interface IBookingStatus {
+  name: string;
+  status: BookingStatusType;
+  color: string;
+}
+
 export interface IBooking extends ICheckoutBody {
   renters: IRenter[];
   event: string;
@@ -37,4 +51,5 @@ export interface IBooking extends ICheckoutBody {
   method: string;
   paypalId: string;
   user: IUser;
+  status: string;
 }

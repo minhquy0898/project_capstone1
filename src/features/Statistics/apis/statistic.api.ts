@@ -2,7 +2,8 @@
  * get setting option in service
  */
 
-import { useQuery } from '@tanstack/react-query';
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
+import { toast } from 'react-toastify';
 import http from '../../../config/axios.config';
 import { IGenericResponse } from '../../../types/common';
 import { IBooking } from '../../../types/booking';
@@ -22,5 +23,26 @@ export const useGetServiceStatistic = (userId: string, userRole: string) => {
     queryKey: ['get-service-statistic', userId, userRole],
     queryFn: () => getServiceStatistic(userId, userRole),
     enabled: !!userId,
+  });
+};
+
+const editOrder = async ({ id, ...order }: Partial<IBooking>) => {
+  const res = await http.put<IGenericResponse>(`/order/${id}`, order);
+  return res.data;
+};
+
+export const useEditOrder = () => {
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: editOrder,
+    onSuccess(data) {
+      if (data.isSuccess) {
+        queryClient.invalidateQueries(['get-service-statistic']);
+        toast.success('Cập nhật đơn hàng thành công!');
+      } else {
+        toast.error('Thất bại!');
+      }
+    },
   });
 };

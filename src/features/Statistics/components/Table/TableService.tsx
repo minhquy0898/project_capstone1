@@ -13,8 +13,6 @@ interface TableServiceProps {
 }
 
 function TableService({ renters }: TableServiceProps) {
-  console.log(renters);
-
   return (
     <>
       <h6 className="w-[10rem] font-semibold ">Danh sách thiết bị</h6>
@@ -37,7 +35,7 @@ function TableService({ renters }: TableServiceProps) {
               <TableCell>{serviceItem.renter.name}</TableCell>
               <TableCell>{serviceItem.renter.unit}</TableCell>
               <TableCell>{serviceItem.renter.price}</TableCell>
-              <TableCell>{serviceItem.renter.quantity}</TableCell>
+              <TableCell>{serviceItem.quantity}</TableCell>
               <TableCell>{serviceItem.renter.note}</TableCell>
             </TableRow>
           )}

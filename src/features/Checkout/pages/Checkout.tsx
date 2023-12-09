@@ -9,7 +9,7 @@ import { useEffect, useState } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
 
-import { PAYPAL_CLIENT_ID } from '../../../config/paypal.config';
+import { PAYPAL_CLIENTid } from '../../../config/paypal.config';
 import {
   useBookingCart,
   useTotalBill,
@@ -85,7 +85,7 @@ function Checkout() {
     <div>
       <PayPalScriptProvider
         options={{
-          clientId: PAYPAL_CLIENT_ID,
+          clientId: PAYPAL_CLIENTid,
           currency: 'USD',
           intent: 'capture',
         }}

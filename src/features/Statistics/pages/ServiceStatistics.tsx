@@ -45,7 +45,7 @@ function ServiceStatistics() {
   return (
     <>
       <div>
-        <TitleBorderStart>Thống kê dịch vụ</TitleBorderStart>
+        <TitleBorderStart>Thống kê đơn hàng</TitleBorderStart>
 
         <Table>
           <TableHeader>
@@ -64,7 +64,7 @@ function ServiceStatistics() {
           >
             {dataStatistic?.data.orders.length
               ? dataStatistic.data.orders.map((order, index) => (
-                  <TableRow key={order._id}>
+                  <TableRow key={order.id}>
                     <TableCell>{index + 1}</TableCell>
                     <TableCell>{`${order.user.firstName} ${order.user.lastName}`}</TableCell>
                     <TableCell>{order.phone}</TableCell>
@@ -78,7 +78,7 @@ function ServiceStatistics() {
                           label="Trạng thái"
                           size="sm"
                           onChange={(event) => {
-                            handleChangeStatus(event, order._id as string);
+                            handleChangeStatus(event, order.id as string);
                           }}
                           defaultSelectedKeys={[order.status || 'not-started']}
                         >

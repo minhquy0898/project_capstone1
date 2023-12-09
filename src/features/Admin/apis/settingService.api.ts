@@ -34,8 +34,8 @@ export const useAddService = () => {
 /**
  * Lấy ra tất cả services
  */
-interface IGetAllServicesApi extends Omit<IServiceItem, 'id'> {
-  _id: string;
+interface IGetAllServicesApi extends IServiceItem {
+  id: string;
 }
 
 const getAllServicesApi = async () => {
@@ -179,7 +179,7 @@ export const addServicePack = async ({
   idService: string;
   payload: any;
 }) => {
-  const { data } = await http.post<any>(
+  const { data } = await http.post<IGenericResponse>(
     `/service/${idService}/setting`,
     payload,
   );
@@ -193,7 +193,7 @@ export const useAddServicePack = (
   const queryClient = useQueryClient();
   return useMutation({
     onSuccess: (dataRes) => {
-      if (dataRes.isFlag) {
+      if (dataRes.isSuccess) {
         queryClient.invalidateQueries(['get-all-services-pack']);
       }
     },

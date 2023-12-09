@@ -84,7 +84,7 @@ function TableSettingService({ onEdit }: TableSettingServiceProps) {
 
         <TableBody items={services?.data.renters ?? []}>
           {(serviceItem) => (
-            <TableRow key={serviceItem._id}>
+            <TableRow key={serviceItem.id}>
               {/* <TableCell>{serviceItem.id}</TableCell> */}
               <TableCell>{serviceItem.name}</TableCell>
               <TableCell>{serviceItem.unit}</TableCell>
@@ -95,7 +95,7 @@ function TableSettingService({ onEdit }: TableSettingServiceProps) {
                 <div className="relative flex items-center gap-2">
                   <Tooltip content="Chỉnh sửa">
                     <Button
-                      onPress={() => onEdit(serviceItem._id)}
+                      onPress={() => onEdit(serviceItem.id)}
                       isIconOnly
                       aria-label="Chỉnh sửa"
                     >
@@ -105,7 +105,7 @@ function TableSettingService({ onEdit }: TableSettingServiceProps) {
                   <Tooltip color="danger" content="Xóa">
                     <Button
                       onPress={() => {
-                        setDeleteId(serviceItem._id);
+                        setDeleteId(serviceItem.id);
                         onOpenDelete();
                       }}
                       isIconOnly

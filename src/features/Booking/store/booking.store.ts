@@ -7,6 +7,7 @@ interface IBookingStore {
   actions: {
     setBookingCart: (itemBooking: IRenter, isRemove?: boolean) => void;
     setInitBookingCart: (initBookingCart: IRenter[]) => void;
+    resetBookingCart: () => void;
   };
 }
 
@@ -42,6 +43,7 @@ const useBookingStore = create<IBookingStore>((set) => ({
           }),
         };
       }),
+    resetBookingCart: () => set(() => ({ bookingCart: [] })),
   },
 }));
 

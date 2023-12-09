@@ -95,6 +95,7 @@ function ModalSettingService({
         },
       });
     }
+    reset(initValues);
   });
 
   return (

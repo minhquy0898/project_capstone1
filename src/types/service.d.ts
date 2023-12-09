@@ -21,6 +21,7 @@ export interface IServiceItem {
 }
 
 interface IServicePackInfomationRenter extends Omit<IRenter, 'renter'> {
+  [x: string]: any;
   id: string;
 }
 

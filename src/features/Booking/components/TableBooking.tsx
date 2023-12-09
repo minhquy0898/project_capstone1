@@ -45,7 +45,7 @@ function TableBooking() {
     }
   }, [servicePackItem?.data.setting.renters.length]);
 
-  console.log('bookingCart', bookingCart);
+  console.log('allServices.data.renters', allServices?.data.renters);
 
   return (
     <Table aria-label="Controlled table example with dynamic content">
@@ -67,25 +67,25 @@ function TableBooking() {
       >
         {!!allServices?.data.renters.length
           ? allServices.data.renters.map((serviceItem) => (
-              <TableRow key={serviceItem._id}>
+              <TableRow key={serviceItem.id ? serviceItem.id : serviceItem.id}>
                 <TableCell>
                   <Checkbox
                     isSelected={
                       !!bookingCart.find(
-                        (cartItem) => cartItem.renter === serviceItem._id,
+                        (cartItem) => cartItem.renter === serviceItem.id,
                       )
                     }
                     onValueChange={(isSelected: boolean) => {
                       if (isSelected) {
                         setBookingCart({
-                          renter: serviceItem._id,
+                          renter: serviceItem.id,
                           price: serviceItem.price,
                           quantity: 1,
                         });
                       } else {
                         setBookingCart(
                           {
-                            renter: serviceItem._id,
+                            renter: serviceItem.id,
                             price: serviceItem.price,
                             quantity: 1,
                           },
@@ -106,21 +106,21 @@ function TableBooking() {
                     <Button
                       disabled={
                         bookingCart.find(
-                          (cartItem) => cartItem.renter === serviceItem._id,
-                        )?.renter !== serviceItem._id ||
+                          (cartItem) => cartItem.renter === serviceItem.id,
+                        )?.renter !== serviceItem.id ||
                         bookingCart.find(
-                          (cartItem) => cartItem.renter === serviceItem._id,
+                          (cartItem) => cartItem.renter === serviceItem.id,
                         )?.quantity === 0
                       }
                       size="sm"
                       isIconOnly
                       onClick={() => {
                         const bookedItem = bookingCart.find(
-                          (cartItem) => cartItem.renter === serviceItem._id,
+                          (cartItem) => cartItem.renter === serviceItem.id,
                         );
 
                         setBookingCart({
-                          renter: serviceItem._id,
+                          renter: serviceItem.id,
                           price: serviceItem.price,
                           quantity: bookedItem?.quantity
                             ? bookedItem.quantity - 1
@@ -132,25 +132,25 @@ function TableBooking() {
                     </Button>
                     <span className="flex-1 text-end">
                       {bookingCart.find(
-                        (cartItem) => cartItem.renter === serviceItem._id,
+                        (cartItem) => cartItem.renter === serviceItem.id,
                       )?.quantity || 0}
                     </span>
                     <Button
                       disabled={
                         bookingCart.find(
-                          (cartItem) => cartItem.renter === serviceItem._id,
-                        )?.renter !== serviceItem._id ||
+                          (cartItem) => cartItem.renter === serviceItem.id,
+                        )?.renter !== serviceItem.id ||
                         bookingCart.find(
-                          (cartItem) => cartItem.renter === serviceItem._id,
+                          (cartItem) => cartItem.renter === serviceItem.id,
                         )?.quantity === serviceItem.quantity
                       }
                       onClick={() => {
                         const bookedItem = bookingCart.find(
-                          (cartItem) => cartItem.renter === serviceItem._id,
+                          (cartItem) => cartItem.renter === serviceItem.id,
                         );
 
                         setBookingCart({
-                          renter: serviceItem._id,
+                          renter: serviceItem.id,
                           price: serviceItem.price,
                           quantity: (bookedItem?.quantity || 0) + 1,
                         });

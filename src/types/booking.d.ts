@@ -5,7 +5,7 @@ import { IUser } from './user';
 interface IBooking {
   renters: IServiceItem[];
   id?: string;
-  _id?: string;
+  id?: string;
 }
 export interface IRenter {
   renter: string;

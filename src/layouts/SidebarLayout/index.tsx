@@ -36,12 +36,12 @@ const sidebarItems: ISidebarOption[] = [
     role: ['admin'],
   },
   {
-    name: 'Thống kê dịch vụ',
+    name: 'Thống kê đơn hàng',
     path: '/service-statistics',
     role: ['user'],
   },
   {
-    name: 'Thống kê dịch vụ',
+    name: 'Thống kê đơn hàng',
     path: '/service-statistics',
     role: ['admin'],
   },

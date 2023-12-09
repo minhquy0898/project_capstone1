@@ -28,21 +28,23 @@ const bookingSchema = Yup.object().shape({
     .nullable(),
 });
 
+const initValues = {
+  name: '',
+  email: '',
+  phone: '',
+  address: '',
+  numberOfAttendes: null,
+  eventTime: null,
+  service: null,
+  servicePack: null,
+};
+
 function Booking() {
   const navigate = useNavigate();
   const [searchParams, setSearchParams] = useSearchParams();
 
   const methods = useFormWithYup(bookingSchema, {
-    defaultValues: {
-      name: 'khach hang',
-      email: 'khachhang@gmail.com',
-      phone: '123',
-      address: '12 hihi',
-      numberOfAttendes: 200,
-      eventTime: null,
-      service: null,
-      servicePack: null,
-    },
+    defaultValues: initValues,
   });
   const { data: categoriesService } = useAllCategoriesService();
   const { data: listServicePack } = useAllServicePack();

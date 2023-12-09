@@ -27,7 +27,7 @@ export const useGetServiceStatistic = (userId: string, userRole: string) => {
 };
 
 const editOrder = async ({ id, ...order }: Partial<IBooking>) => {
-  const res = await http.put<IGenericResponse>(`/order/${id}`, order);
+  const res = await http.patch<IGenericResponse>(`/order/${id}`, order);
   return res.data;
 };
 

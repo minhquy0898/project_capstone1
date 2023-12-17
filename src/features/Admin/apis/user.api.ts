@@ -1,6 +1,7 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import http from '../../../config/axios.config';
 import { MutationConfig } from '../../../config/react-query.config';
+import { IGenericResponse } from '../../../types/common';
 
 /**
  * change profile
@@ -18,7 +19,7 @@ export const changeProfile = async ({
   userId: string;
   payload: IProfileBody;
 }) => {
-  const res = await http.patch(`/user/${userId}`, payload);
+  const res = await http.patch<IGenericResponse>(`/user/${userId}`, payload);
 
   return res.data;
 };

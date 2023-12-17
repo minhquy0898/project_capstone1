@@ -28,17 +28,19 @@ function TableService({ renters }: TableServiceProps) {
           <TableColumn>Ghi chú</TableColumn>
         </TableHeader>
 
-        <TableBody items={renters ?? []}>
-          {(serviceItem) => (
-            <TableRow key={serviceItem.renter.id}>
-              <TableCell>{serviceItem.renter.id}</TableCell>
-              <TableCell>{serviceItem.renter.name}</TableCell>
-              <TableCell>{serviceItem.renter.unit}</TableCell>
-              <TableCell>{serviceItem.renter.price}</TableCell>
-              <TableCell>{serviceItem.quantity}</TableCell>
-              <TableCell>{serviceItem.renter.note}</TableCell>
-            </TableRow>
-          )}
+        <TableBody>
+          {renters.length
+            ? renters.map((serviceItem, index) => (
+                <TableRow key={serviceItem.renter.id}>
+                  <TableCell>{index + 1}</TableCell>
+                  <TableCell>{serviceItem.renter.name}</TableCell>
+                  <TableCell>{serviceItem.renter.unit}</TableCell>
+                  <TableCell>{serviceItem.renter.price}</TableCell>
+                  <TableCell>{serviceItem.quantity}</TableCell>
+                  <TableCell>{serviceItem.renter.note}</TableCell>
+                </TableRow>
+              ))
+            : []}
         </TableBody>
       </Table>
     </>

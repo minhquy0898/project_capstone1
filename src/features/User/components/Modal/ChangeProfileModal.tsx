@@ -29,6 +29,7 @@ const initValues = {
   firstName: '',
   lastName: '',
   email: '',
+  phoneNumber: '',
 };
 
 interface ModalChangeProfileProps extends Omit<ModalProps, 'children'> {
@@ -49,6 +50,7 @@ function ModalChangeProfile({
       firstName: dataUser?.data?.account?.firstName ?? '',
       lastName: dataUser?.data?.account?.lastName ?? '',
       email: dataUser?.data?.account?.email ?? '',
+      phoneNumber: dataUser?.data?.account?.phoneNumber ?? '',
     },
   });
 
@@ -69,7 +71,7 @@ function ModalChangeProfile({
             onOpenChange!(false);
             reset(initValues);
           } else {
-            toast.success('Thay đổi thất bại!');
+            toast.error(data.msg || 'Thay đổi thất bại!');
           }
         },
       },
@@ -97,6 +99,11 @@ function ModalChangeProfile({
                     name="email"
                     placeholder="abc@gmail.com"
                     label="Email"
+                  />
+                  <CInput
+                    name="phoneNumber"
+                    placeholder="Số điện thoại"
+                    label="Số điện thoại"
                   />
 
                   <div className="text-end">

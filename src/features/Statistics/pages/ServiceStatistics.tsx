@@ -68,7 +68,7 @@ function ServiceStatistics() {
                     <TableCell>{index + 1}</TableCell>
                     <TableCell>{`${order.user.firstName} ${order.user.lastName}`}</TableCell>
                     <TableCell>{order.phone}</TableCell>
-                    <TableCell>{order.paypalId}</TableCell>
+                    <TableCell>{order.paypalId || order.id}</TableCell>
                     <TableCell>
                       <NumberFormat value={calculateTotalBill(order.renters)} />
                     </TableCell>

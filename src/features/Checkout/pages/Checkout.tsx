@@ -27,8 +27,6 @@ function Checkout() {
 
   // creates a paypal order
   const createOrder = (data: CreateOrderData, actions: CreateOrderActions) => {
-    console.log('data', data);
-
     return actions.order
       .create({
         purchase_units: [
@@ -43,7 +41,6 @@ function Checkout() {
       })
       .then((orderID) => {
         setOrderID(orderID);
-
         return orderID;
       });
   };

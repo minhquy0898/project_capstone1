@@ -6,7 +6,7 @@ function ServicesHome() {
   const { data, isLoading } = useAllEvent();
 
   const events =
-    Number(data?.data.events.length) > 6
+    Number(data?.data.events?.length) > 6
       ? data?.data.events.slice(6)
       : data?.data.events;
 

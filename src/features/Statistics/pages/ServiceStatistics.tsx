@@ -64,48 +64,48 @@ function ServiceStatistics() {
           >
             {dataStatistic?.data.orders.length
               ? dataStatistic.data.orders.map((order, index) => (
-                  <TableRow key={order.id}>
-                    <TableCell>{index + 1}</TableCell>
-                    <TableCell>{`${order.user.firstName} ${order.user.lastName}`}</TableCell>
-                    <TableCell>{order.phone}</TableCell>
-                    <TableCell>{order.paypalId || order.id}</TableCell>
-                    <TableCell>
-                      <NumberFormat value={calculateTotalBill(order.renters)} />
-                    </TableCell>
-                    <TableCell>
-                      {dataUser?.data.account.role === 'admin' ? (
-                        <Select
-                          label="Trạng thái"
-                          size="sm"
-                          onChange={(event) => {
-                            handleChangeStatus(event, order.id as string);
-                          }}
-                          defaultSelectedKeys={[order.status || 'not-started']}
-                        >
-                          {bookingStatus.map((status) => (
-                            <SelectItem
-                              key={status.status}
-                              value={status.status}
-                            >
-                              {status.name}
-                            </SelectItem>
-                          ))}
-                        </Select>
-                      ) : (
-                        <Chip
-                          className={`${bookingStatus.find(
-                            (statusItem) => statusItem.status === order.status,
-                          )?.color}`}
-                        >
-                          {order.status || 'Chưa triển khai'}
-                        </Chip>
-                      )}
-                    </TableCell>
-                    <TableCell>
-                      <ModalStatisticsDetail order={order} />
-                    </TableCell>
-                  </TableRow>
-                ))
+                <TableRow key={order.id}>
+                  <TableCell>{index + 1}</TableCell>
+                  <TableCell>{`${order.user.firstName} ${order.user.lastName}`}</TableCell>
+                  <TableCell>{order.phone}</TableCell>
+                  <TableCell>{order.paypalId || order.id}</TableCell>
+                  <TableCell>
+                    <NumberFormat value={calculateTotalBill(order.renters)} />
+                  </TableCell>
+                  <TableCell>
+                    {dataUser?.data.account.role === 'admin' ? (
+                      <Select
+                        label="Trạng thái"
+                        size="sm"
+                        onChange={(event) => {
+                          handleChangeStatus(event, order.id as string);
+                        }}
+                        defaultSelectedKeys={[order.status || 'not-started']}
+                      >
+                        {bookingStatus.map((status) => (
+                          <SelectItem
+                            key={status.status}
+                            value={status.status}
+                          >
+                            {status.name}
+                          </SelectItem>
+                        ))}
+                      </Select>
+                    ) : (
+                      <Chip
+                        className={`${bookingStatus.find(
+                          (statusItem) => statusItem.status === order.status,
+                        )?.color}`}
+                      >
+                        {order.status || 'Chưa triển khai'}
+                      </Chip>
+                    )}
+                  </TableCell>
+                  <TableCell>
+                    <ModalStatisticsDetail order={order} />
+                  </TableCell>
+                </TableRow>
+              ))
               : []}
           </TableBody>
         </Table>

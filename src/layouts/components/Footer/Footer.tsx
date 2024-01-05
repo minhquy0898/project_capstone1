@@ -188,7 +188,7 @@ function Footer() {
     // </footer>
     <div className="footer flex justify-between">
       {/* <div className=" bg-rgba-blue"></div> */}
-      <div className="text-center flex justify-center items-center mx-auto bg-white h-[230px] mt-20 p-10 rounded-lg">
+      <div className="text-center flex justify-center items-center mx-auto bg-white h-[280px] mt-20 p-10 rounded-lg">
         <div className=" mr-16 w-[33.33%]">
           <p className=" uppercase text-xl text-violet-900 font-bold text-left">Thông tin liên hệ</p>
           <div className=" text-left">
@@ -205,7 +205,7 @@ function Footer() {
             <div className="mt-2">Ngân hàng : MB Bank</div>
           </div>
         </div>
-        <div className="">
+        <div className=" mt-8">
           <p className=" uppercase text-xl text-violet-900 font-bold text-left">Thông tin công ty</p>
           <div className="text-left">
             <div className="mt-2">CTY TNHH TO CHUC SU KIEN DA NANG</div>

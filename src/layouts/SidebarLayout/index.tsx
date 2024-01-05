@@ -62,7 +62,7 @@ function SidebarLayout({ children }: SidebarLayoutProps) {
         <div className="sm:ml-64 flex-1 my-[100px] min-h-screen mb-0">
           <div className="h-full flex flex-col justify-between">
             <div className="mb-52">{children}</div>
-            <Footer />
+            {/* <Footer /> */}
           </div>
         </div>
       </main>

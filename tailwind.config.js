@@ -8,7 +8,11 @@ export default {
     './node_modules/@nextui-org/theme/dist/**/*.{js,ts,jsx,tsx}',
   ],
   theme: {
-    extend: {},
+    extend: {
+      backgroundColor: {
+        'rgba-blue': 'rgba(44, 107, 174, 0.901)',
+      }
+    },
   },
   darkMode: 'class',
   plugins: [

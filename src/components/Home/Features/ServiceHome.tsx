@@ -18,35 +18,35 @@ function ServicesHome() {
         </div>
       )}
       {!isLoading && data?.data.events?.length && (
-        <div className="my-6">
-          <h3 className="font-bold mb-4 text-3xl">DỊCH VỤ SỰ KIỆN</h3>
+        <div className="my-6 bg-blue-100 h-[auto]">
+          <h3 className="font-bold mb-6 text-3xl text-center text-blue-500 ">DỊCH VỤ SỰ KIỆN</h3>
 
-          <div className="gap-2 grid grid-cols-2 sm:grid-cols-5">
+          <div className="gap-2 grid grid-cols-2 sm:grid-cols-5 text-center p-9">
             {events
               ? events.map((cardItem) => (
-                  <Card
-                    key={cardItem.id}
-                    as={Link}
-                    to={`/dich-vu/${cardItem.id}`}
-                    shadow="sm"
-                    isPressable
-                    onPress={() => console.log('item pressed')}
-                  >
-                    <CardBody className="overflow-visible p-0">
-                      <Image
-                        shadow="sm"
-                        radius="lg"
-                        width="100%"
-                        alt={cardItem.banner}
-                        className="w-full object-cover h-[140px]"
-                        src={cardItem.banner || 'https://picsum.photos/200/300'}
-                      />
-                    </CardBody>
-                    <CardFooter className="text-small justify-between">
-                      <b>{cardItem.title}</b>
-                    </CardFooter>
-                  </Card>
-                ))
+                <Card
+                  key={cardItem.id}
+                  as={Link}
+                  to={`/dich-vu/${cardItem.id}`}
+                  shadow="sm"
+                  isPressable
+                  onPress={() => console.log('item pressed')}
+                >
+                  <CardBody className="overflow-visible p-0">
+                    <Image
+                      shadow="sm"
+                      radius="lg"
+                      width="100%"
+                      alt={cardItem.banner}
+                      className="w-full object-cover h-[140px]"
+                      src={cardItem.banner || 'https://picsum.photos/200/300'}
+                    />
+                  </CardBody>
+                  <CardFooter className="text-small justify-between">
+                    <b>{cardItem.title}</b>
+                  </CardFooter>
+                </Card>
+              ))
               : ''}
           </div>
         </div>

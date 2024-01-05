@@ -1,6 +1,7 @@
 import { lazy } from 'react';
 import { IRoute } from '../types/route';
 import SideBySideLayout from '../layouts/SideBySideLayout';
+import Contact from '../pages/Contact';
 
 const LandingPage = lazy(() => import('../pages/LandingPage'));
 const Home = lazy(() => import('../pages/Home'));
@@ -46,6 +47,10 @@ const publicRoutes: IRoute[] = [
   {
     page: <Introduce />,
     path: 'gioi-thieu',
+  },
+  {
+    page: <Contact />,
+    path: 'lien-he'
   },
   {
     page: <EventServiceDetail />,

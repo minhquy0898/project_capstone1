@@ -15,7 +15,7 @@ import { useMemo } from 'react';
 
 import NavItem from './NavItem';
 import { useFetchUser, useLogout } from '../../../apis/auth.api';
-
+import logo from "../../../assets/images/logo.png"
 const navOptions = [
   {
     title: 'Trang chủ',
@@ -56,11 +56,12 @@ function Header() {
   }, [userData?.data?.account?.role]);
 
   return (
-    <Navbar isBordered maxWidth="full" className="fixed">
+    <Navbar isBordered maxWidth="full" className="fixed bg-blue-800" >
       <NavbarBrand>
-        <p className="font-bold text-inherit">LOGO</p>
+        {/* <p className="font-bold text-inherit">LOGO</p> */}
+        <img src={logo} className='w-[110px] ' alt="" />
       </NavbarBrand>
-      <NavbarContent className="hidden sm:flex gap-4" justify="center">
+      <NavbarContent className="hidden sm:flex gap-16 text-white" justify="center">
         {navOptions.map((navItem) => (
           <NavItem to={navItem.url} key={navItem.url}>
             {navItem.title}
@@ -74,6 +75,7 @@ function Header() {
           as={Link}
           startContent={<MdOutlineCalendarToday />}
           color="primary"
+          className=' bg-white text-black'
         >
           Đặt lịch
         </Button>

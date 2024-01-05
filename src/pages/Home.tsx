@@ -2,6 +2,10 @@ import Value from '../components/Home/Features/Value';
 import ServiceHome from '../components/Home/Features/ServiceHome';
 import Advantage from '../components/Home/Features/Advantage';
 import CarouselHome from '../components/Home/Features/CarouselHome';
+import Consultant from '../components/Home/Features/Consultant';
+import Evaluate from '../components/Home/Features/Evaluate';
+import Partner from '../components/Home/Features/Partner';
+import Footer from '../layouts/components/Footer/Footer';
 
 function Home() {
   return (
@@ -17,6 +21,9 @@ function Home() {
       <Value />
       <Advantage />
       <ServiceHome />
+      <Consultant />
+      <Evaluate />
+      <Partner />
     </>
   );
 }
